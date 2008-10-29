@@ -1,0 +1,50 @@
+%h1
+  Edit Query
+  = h @query.name.inspect
+
+= link_to 'Show', url(:query, @query)
+|
+= link_to 'Back', url(:queries)
+
+= error_messages_for :query
+
+= form_for(@query, :action => url(:query, @query)) do
+  %table
+    %tr
+      %th 
+        Name
+      %td
+        = text_field :name
+    %tr
+      %th 
+        Description
+      %td><
+        = my_text_area @query, :query, :description
+    %tr
+      %th 
+        Query
+      %td><
+        = my_text_area @query, :query, :query, :cols => 80, :rows => [ @query.query_lines.size, 32 ].min
+    %tr
+      %th 
+        Sensitive?
+      %td
+        Query?
+        = check_box :query_is_sensitive
+        Result?
+        = check_box :result_is_sensitive
+ 
+  %p
+    = submit "Update"
+    = submit "Update and Execute"
+
+%hr
+
+- if @query_execution = @query.query_executions.last 
+  %h2
+    Most recent execution of 
+    = @query.query_executions_count
+    executions.
+  = partial 'query_executions/show'
+  %hr
+ 

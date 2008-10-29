@@ -1,0 +1,45 @@
+%h1
+  Query
+  = h @query.name.inspect
+
+= link_to 'Edit',  url(:edit_query,  @query)
+|
+= link_to 'Back', url(:queries)
+
+%table
+  %tr
+    %th
+      Name
+    %td
+      = h @query.name
+      ~ my_pre @query.description
+  %tr
+    %th
+      Created By  
+    %td
+      = h @query.created_by.login
+      = h @query.created_on
+  %tr
+    %th
+      Query
+    %td><
+      ~ my_pre @query.query, :class => :sql_statement
+
+  %tr
+    %th
+      Sensitive
+    %td.left
+      = @query.query_is_sensitive  ? x = "Query" : ''
+      = @query.result_is_sensitive ? x = "Result" : ''
+      = x ? '' : '<i>Not Sensitive</i>'
+
+  %tr
+    %th 
+    %td
+      = link_to 'Execute', "execute/#{@query.id}"
+
+%h2
+  Executions
+= partial 'query_executions/list', :query_executions => @query.query_executions, :show_query => false
+
+

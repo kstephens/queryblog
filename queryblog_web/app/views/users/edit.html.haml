@@ -1,0 +1,39 @@
+%h1
+  Edit User
+  = h @user.login.inspect
+
+= error_messages_for :user
+
+= form_for(@user, :action => url(:user, @user)) do
+
+  %table
+    - if current_user_can_edit? @user, :login
+      %tr
+        %td 
+          Login
+        %td
+          = text_field :login
+    - if current_user_can_edit? @user, :password
+      %tr
+        %td
+          Password
+        %td
+          = password_field :password
+      %tr
+        %td
+          Password Again
+        %td
+          = password_field :password_confirmation
+    - if current_user_can_edit? @user, :enable_login
+      %tr
+        %td 
+          Enable Login?
+        %td
+          = check_box :enable_login
+
+  %p
+    = submit "Update"
+
+= link_to 'Show', url(:user, @user)
+|
+= link_to 'Back', url(:users)

@@ -1,0 +1,20 @@
+%h1.header
+  <a href="/">Query Blog - Ask a question with SQL?  Share a solution!</a>
+%hr.top_menu
+%div.top_menu
+  = link_to 'Home', '/'
+  |
+  = link_to 'Queries', '/queries'
+  |
+  = link_to 'Executions', '/query_executions'
+  |
+  = link_to 'Users', '/users'
+  |
+  - if session.respond_to?(:user) && session.user
+    Hello, 
+    = link_to session.user.login, "/users/#{session.user.id}"
+    = link_to '(logout)', '/login/logout'
+  - else
+    = link_to 'Login', '/login'
+%hr.top_menu
+

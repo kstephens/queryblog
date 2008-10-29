@@ -1,0 +1,39 @@
+%h1 Queries controller, new action
+
+%p 
+  Edit this file in 
+  %tt app/views/queries/new.html.erb
+
+= error_messages_for :query
+
+= form_for(@query, :action => url(:queries) ) do
+  %table
+    %tr
+      %th 
+        Name
+      %td
+        = text_field :name
+    %tr
+      %th 
+        Description
+      %td
+        = text_area :description
+    %tr
+      %th 
+        Query
+      %td
+        = text_area :query
+    %tr
+      %th 
+        Query is sensitive?
+      %td
+        = check_box :query_is_sensitive
+    %tr
+      %th 
+        Result is sensitive?
+      %td
+        = check_box :result_is_sensitive
+  %p
+    = submit "Create"
+
+= link_to 'Back', url(:queries)

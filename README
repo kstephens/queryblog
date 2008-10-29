@@ -1,0 +1,107 @@
+queryblog - a blog for social SQL query writers
+
+Overview:
+
+Gives SQL query users a means to share and understand SQL queries in a large organization.
+
+* Front Page
+** Recent Queries
+** Currently running Queries
+** Top Rated Queries
+** Top Queries
+** Top Query Writers
+** Top Query Runners (daily top query runners)
+** Top Database Users (daily top DB time used)
+** Login
+
+* User
+** URI: user/:id
+** Blog
+** Favorite Queries
+** Last N Queries Written
+** Last N Queries Ran
+** Queue of Queries Pending
+
+* Query
+** URI: query/:id
+** Name
+** Description
+** Database
+** Last execution
+** Related queries
+** Tags
+** Parent query
+** Version
+** Votes
+*** Usefulness
+*** Efficiency
+*** Correctness
+
+* Query Parameter
+** URI: query_parameter/:id
+** Name
+** Description
+** Default
+** Type
+** Valid Set (from list or query?)
+
+** Query Schedule
+*** User(s)
+*** Date / Time
+*** Query
+*** Notification
+*** Email results?
+
+** Query Execution
+** URI: query_execution/:id
+*** Query
+*** Who
+*** When
+*** Server
+*** Status
+**** Queued
+**** Running
+**** Errored
+**** Aborted
+**** Finished
+
+** Query Results
+** URI: query_results/:id
+*** Pagination
+*** Columns
+*** Export to CSV
+*** Stats - Time, # Rows Returned
+*** Comments
+**** Who
+**** When
+**** Comment
+
+* Database
+** URI: database/:id
+** Name
+** Description
+** Schema
+** Server(s)
+
+* Server
+** URI: server/:id
+** Name
+** Description
+** Queue Depth
+** Pending in Queue
+** Master / Slave
+
+* Schema
+** URI: schema/:id
+** Name
+** Description
+** Table / Views
+*** Name
+*** Description
+**** Columns
+***** Name
+***** Description
+***** Type
+***** FK/PK
+
+

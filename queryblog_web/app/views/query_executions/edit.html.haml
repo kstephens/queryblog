@@ -1,0 +1,15 @@
+%h1
+  QueryExecutions controller, edit action
+%p
+  Edit this file in
+  %tt
+    app/views/query_executions/edit.html.erb
+= error_messages_for :query_execution
+
+= form_for(@query_execution, :action => url(:query_execution, @query_execution)) do
+  %p
+    = submit "Update"
+
+= link_to 'Show', url(:query_execution, @query_execution)
+|
+= link_to 'Back', url(:query_executions)

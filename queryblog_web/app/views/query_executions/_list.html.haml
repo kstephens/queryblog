@@ -1,0 +1,41 @@
+%table
+  %tr
+    - if show_query
+      %th
+        Query
+    %th
+      = '#'
+    %th
+      User
+    %th
+      Started
+    %th
+      Elapsed Time
+    %th
+      Sensitive
+    %th
+      Error
+  - for qe in query_executions
+    %tr
+      - if show_query
+        %td
+          = link_to qe.query.name, url(:query, qe.query)
+      %td.integer
+        = link_to "\##{qe.query_executions_index}", url(:query_execution, qe)
+      %td.center
+        = link_to qe.created_by.login, url(:user, qe.created_by)
+      %td
+        = link_to my_time(qe.started_on), url(:query_execution, qe)
+      %td.float
+        = h my_secs qe.elapsed_time
+      %td.left
+        = qe.query_is_sensitive  ? x = "Query" : ''
+        = qe.result_is_sensitive ? x = "Result" : ''
+        = x ? '' : '<i>Not Sensitive</i>'
+      %td
+        - if e = qe.error
+          %span.error
+            = h my_synopsis(e)
+        - else
+          = h '<none>'
+

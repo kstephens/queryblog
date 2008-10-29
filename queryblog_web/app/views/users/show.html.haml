@@ -1,0 +1,14 @@
+%h1
+  User
+  = @user.login.inspect
+
+%table
+  %tr
+    %td 
+      Login
+    %td
+      = @user.login
+
+= link_to 'Edit',  url(:edit_user,  @user)
+|
+= link_to 'Back', url(:users)

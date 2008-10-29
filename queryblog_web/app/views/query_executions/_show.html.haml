@@ -1,0 +1,45 @@
+%table
+  - if @show_query
+    %tr
+      %th 
+        Query
+      %td
+        = link_to @query_execution.query.name, url(:query, @query_execution.query)
+  %tr
+    %th
+      User
+    %td
+      = link_to @query_execution.created_by.login, url(:user, @query_execution.created_by)
+      at
+      = h @query_execution.created_on
+  %tr
+    %th
+      Time
+    %td
+      = h my_time(@query_execution.started_on)
+      for
+      = h my_secs(@query_execution.elapsed_time)
+  - if @query_execution.error || @query_execution.backtrace
+    %tr
+      %th
+        Error
+      %td
+        - if e = @query_execution.error
+          ~ my_pre e, :style => :error
+        - else
+          = h '<none>'
+    %tr
+      %th
+        Backtrace
+      %td
+        - if e = @query_execution.backtrace
+          ~ my_pre e, :style => :backtrace
+        - else
+          = h '<none>'
+
+%h2
+  Results
+
+- for @query_result in @query_execution.query_results
+  = partial 'query_results/show'
+

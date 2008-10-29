@@ -1,0 +1,24 @@
+%div
+  %table
+    %tr
+      %th
+        Name
+      %th
+        User
+      %th
+        = '# Runs'
+      %th
+        = link_to 'New Query', url(:new_query)
+    - for query in queries
+      %tr
+        %td
+          = link_to query.name, url(:query, query)
+        %td.center
+          = link_to query.created_by.login, url(:user, query.created_by)
+        %td.integer
+          = h query.query_executions_count
+        %td
+          - if current_user_can_edit? query
+            = link_to 'Edit', url(:edit_query, query)
+
+

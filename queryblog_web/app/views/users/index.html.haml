@@ -1,0 +1,28 @@
+%h2
+  Users
+%table
+  %tr
+    %th 
+      User
+    %th
+      Created
+    %th
+      Enabled
+    %th
+      - if current_user_can? 'user/new'
+        = link_to 'New', url(:new_user)
+  - for user in @users
+    %tr
+      %td
+        - if current_user_can_show? user
+          = link_to user.login, url(:user, user)
+        - else
+          = h user.login
+      %td
+        = user.created_on
+      %td
+        = user.enable_login.inspect
+      %td
+        - if current_user_can_edit? user
+          = link_to 'Edit', url(:edit_user, user)
+

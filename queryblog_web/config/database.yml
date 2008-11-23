@@ -4,7 +4,8 @@ development: &defaults
   adapter: postgresql
   database: queryblog
   host: 127.0.0.1
-  port: 5434
+#  port: 5434
+  port: 5432
   username: queryblog
   password: queryblog
   

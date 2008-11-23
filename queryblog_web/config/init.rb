@@ -22,7 +22,9 @@ Merb::Config.use do |c|
 end
  
 
-Merb.add_mime_type(:csv, :to_csv, %w[text/csv])
+Merb.add_mime_type :csv, :to_csv, %w[text/csv]
+Merb.add_mime_type :yaml, :to_yaml, %w[text/plain] # %w[text/yaml]
+Merb.add_mime_type :json, :to_json, %w[text/plain] # %w[text/json]
 
 Merb::BootLoader.before_app_loads do
   # This will get executed after dependencies have been loaded but before your app's classes have loaded.

@@ -1,3 +1,5 @@
+
+# Represents authorization roles associated with users.
 class AuthRole
   include DataMapper::Resource
   

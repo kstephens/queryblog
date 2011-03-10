@@ -1,3 +1,5 @@
+
+# Determines the rating type and its range.
 class RatingType
   include DataMapper::Resource
   
@@ -5,5 +7,8 @@ class RatingType
 
   property :name, String
   property :description, String
+
+  property :min_rating, Float
+  property :max_rating, Float
 
 end

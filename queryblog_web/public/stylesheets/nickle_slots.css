@@ -7,3 +7,9 @@
 .ns_edit_status {
   color: orange;
 }
+.ns_slot_label {
+  text-align: right;
+}
+.ns_edit_link img {
+  border: none;
+}

@@ -26,17 +26,17 @@ class Application < Merb::Controller
   protected :initialize_created_by!
 
 
-  def auth_solver
-    @auth_solver ||=
-      AuthSolver.new(:user => current_user)
+  def authorizer
+    @authorizer ||=
+      Authorizer.new(:user => current_user)
   end
-  protected :auth_solver
+  protected :authorizer
 
 
   def authenticated_user_can? action = nil
     action ||= uri_action
     authenticated_user && 
-      auth_solver.user_can_do?(*action.split('/'))
+      authorizer.user_can_do?(*action.split('/'))
   end
   protected :authenticated_user_can?
 
@@ -46,7 +46,7 @@ class Application < Merb::Controller
 
     result = 
       current_user &&
-      auth_solver.user_can_do?(*action.split('/'))
+      authorizer.user_can_do?(*action.split('/'))
 
     $stderr.puts "current_user_can_show?(#{(current_user && current_user.login).inspect}, #{object.inspect} #{action.inspect}) => #{result.inspect}"
 
@@ -60,7 +60,7 @@ class Application < Merb::Controller
 
     result = 
       current_user &&
-      auth_solver.user_can_do?(*action.split('/'))
+      authorizer.user_can_do?(*action.split('/'))
 
     $stderr.puts "current_user_can_edit?(#{(current_user && current_user.login).inspect}, #{object.inspect} #{action.inspect}) => #{result.inspect}"
 
@@ -73,7 +73,7 @@ class Application < Merb::Controller
     action ||= uri_action
     result = 
       current_user &&
-      auth_solver.user_can_do?(*action.split('/'))
+      authorizer.user_can_do?(*action.split('/'))
 
     $stderr.puts "current_user_can?(#{(current_user && current_user.login).inspect}, #{action.inspect}) => #{result.inspect}"
 

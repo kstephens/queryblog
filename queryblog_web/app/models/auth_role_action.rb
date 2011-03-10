@@ -1,3 +1,5 @@
+
+# Maps roles and actions.
 class AuthRoleAction
   include DataMapper::Resource
   
@@ -24,7 +26,9 @@ require 'auth_role'
 class AuthRole
   has 0 .. n, :role_actions, :child_key => [ :role_id ], :class_name => 'AuthRoleAction'
 
+  # Returns the enabled actions for this role.
   def actions
     role_actions.select{|x| x.enabled}.map{|x| x.action}
   end
 end
+

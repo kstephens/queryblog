@@ -24,14 +24,16 @@ class Objects < Application # AuthenticatedController
     @clsname = params[:cls]
     @id = params[:id]
     @slot = params[:slot]
-    @cls = Object.const_get(@clsname)
+    @cls = (@clsname.split('::').inject(Object){ | o, n | o.const_get(n) } rescue nil)
+    raise ArgumentError, "Cannot locate #{@clsname.inspect}" unless @cls
     @obj = @cls.get!(@id)
   end
   private :load_obj
 
+
   def authorizer
     @authorizer ||=
-      AuthSolver.new(:user => current_user)
+      Authorizer.new(:user => current_user)
   end
 
 end # Objects

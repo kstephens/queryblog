@@ -1,16 +1,19 @@
 
 class AuthBuilder
 
+  # Returns the root user.
   def self.root_user
     @@root_user ||=
       AuthUser.first(:login => 'root')
   end
 
+  # Returns the system user.
   def self.system_user
     @@system_user ||=
       AuthUser.first(:login => '*system*')
   end
 
+  # Returns the guest user.
   def self.guest_user
     @@guest_user ||=
       AuthUser.first(:login => '*guest*')

@@ -1,10 +1,21 @@
+require 'nickle_slots'
+
 class Users < AuthenticatedController
   # provides :xml, :yaml, :js
+
+  include NickleSlots::Helper
 
   def index
     raise AuthorizationError unless current_user_can?
     @users = User.all
     display @users
+  end
+
+  def inspect(id)
+    # raise AuthorizationError unless current_user_can?
+    @user = User.get(id)
+    raise NotFound unless @user
+    display @user
   end
 
   def show(id)

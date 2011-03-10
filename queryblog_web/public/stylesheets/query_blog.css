@@ -1,3 +1,32 @@
+h1.header {
+  text-align: center;
+  font-size: 140%;
+}
+
+h1.header a {
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 120%;
+}
+
+h2 {
+  font-size: 110%;
+}
+
+div.top_menu {
+  text-align: right;
+}
+
+div.footer {
+  font-size: -2;
+  text-align: center;
+}
+
+
+//////////////////////////////////////////////////////////////
+
 table.query_result {
   border: medium solid rgb(0, 0, 0);
   border-width: 1px;
@@ -47,18 +76,6 @@ pre.sql_statement {
   font-weight: bold;
 }
 
-h1.header {
-  text-align: center;
-}
-
-div.top_menu {
-  text-align: right;
-}
-
-div.footer {
-  font-size: -2;
-  text-align: center;
-}
 
 .right {
   text-align: right;

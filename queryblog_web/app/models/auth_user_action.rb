@@ -1,3 +1,7 @@
+
+# Maps users and their immediately associated actions.
+#
+# These mappings take priority over any actions associated by a user's roles.
 class AuthUserAction
   include DataMapper::Resource
   

@@ -1,3 +1,5 @@
+
+# Represents an action that can be applied to a object by an authorized user.
 class AuthAction
   include DataMapper::Resource
   

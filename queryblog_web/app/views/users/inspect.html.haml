@@ -1,0 +1,14 @@
+%h1
+  User
+  = h @user.login.inspect
+
+= error_messages_for :user
+
+= object :user, @user do
+  = slot :login
+  = slot :password,     :type => :password 
+  = slot :enable_login, :type => :boolean
+
+= link_to 'Show', url(:user, @user)
+|
+= link_to 'Back', url(:users)

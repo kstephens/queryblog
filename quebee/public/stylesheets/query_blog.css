@@ -1,0 +1,94 @@
+h1.header {
+  text-align: center;
+  font-size: 140%;
+}
+
+h1.header a {
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 120%;
+}
+
+h2 {
+  font-size: 110%;
+}
+
+div.top_menu {
+  text-align: right;
+}
+
+div.footer {
+  font-size: -2;
+  text-align: center;
+}
+
+
+//////////////////////////////////////////////////////////////
+
+table.query_result {
+  border: medium solid rgb(0, 0, 0);
+  border-width: 1px;
+}
+
+th.query_result_column { 
+  border: medium solid rgb(50, 50, 50);
+  border-width: 1px;
+  font-weight: bold;
+}
+
+th.query_result_type {
+  font-style: italic; 
+  font-weight: normal;
+}
+
+th.query_result_sep { 
+  border-top: medium solid rgb(50, 50, 50);
+  border-width: 1px;
+}
+
+td.center, td.TrueClass {
+  text-align: center;
+}
+
+td.integer, td.Fixnum {
+  text-align: right;
+}
+
+td.float, td.Float {
+  text-align: ".";
+}
+
+td.time {
+}
+
+.odd {
+ background-color: #ddd;
+}
+
+.even {
+ background-color: #fff;
+}
+
+pre.sql_statement {
+  color: rgb(0,128, 0);
+  font-weight: bold;
+}
+
+
+.right {
+  text-align: right;
+}
+
+.center {
+  text-align: center;
+}
+
+.left {
+  text-align: left;
+}
+
+.error {
+  font-color: rgb(180, 50, 50);
+}

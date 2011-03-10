@@ -1,3 +1,5 @@
+module Quebee
+
 class DatabaseColumn
   include DataMapper::Resource
   
@@ -8,5 +10,7 @@ class DatabaseColumn
   property :name, String
   property :description, Text
   property :index, Integer
+
+end
 
 end

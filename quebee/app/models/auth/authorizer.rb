@@ -1,3 +1,4 @@
+module Auth
 
 # Performs authorization checks based on a user's roles and immediate actions.
 class Authorizer
@@ -283,4 +284,5 @@ END
 
 end
 
+end
 

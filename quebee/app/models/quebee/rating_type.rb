@@ -1,3 +1,4 @@
+module Quebee
 
 # Determines the rating type and its range.
 class RatingType
@@ -10,5 +11,7 @@ class RatingType
 
   property :min_rating, Float
   property :max_rating, Float
+
+end
 
 end

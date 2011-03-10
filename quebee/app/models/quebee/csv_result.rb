@@ -4,6 +4,8 @@ require 'fastercsv'
 require 'fileutils'
 
 
+module Quebee
+
 # Represents a basic CSV file.
 # with a row_index file for fast pagination.
 class CsvResult
@@ -491,5 +493,7 @@ module UniqueFile
     end
     d.hexdigest
   end
+
+end
 
 end

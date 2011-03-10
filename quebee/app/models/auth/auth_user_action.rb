@@ -1,3 +1,4 @@
+module Auth
 
 # Maps users and their immediately associated actions.
 #
@@ -24,7 +25,9 @@ class AuthUserAction
 end
 
 
-require 'auth_user'
+require 'auth/auth_user'
 class AuthUser
   has 0 .. n, :user_actions, :class_name => 'AuthUserAction'
+end
+
 end

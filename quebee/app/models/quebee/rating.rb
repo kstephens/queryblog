@@ -1,3 +1,4 @@
+module Quebee
 
 # A user rating of a object.
 class Rating
@@ -12,4 +13,6 @@ class Rating
   belongs_to :user, :class_name => 'User'
 
   belongs_to :rating_type, :class_name => 'RatingType'
+end
+
 end

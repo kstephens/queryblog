@@ -1,4 +1,6 @@
-AuthUser = User
+module Auth
+
+AuthUser = ::User
 
 class AuthUser
 
@@ -61,3 +63,4 @@ class AuthUser
 
 end
 
+end

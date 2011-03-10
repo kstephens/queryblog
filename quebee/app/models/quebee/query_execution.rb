@@ -1,3 +1,4 @@
+module Quebee
 
 class QueryExecution
   include DataMapper::Resource
@@ -80,4 +81,4 @@ class QueryExecution
   end
 end
 
-
+end

@@ -1,3 +1,5 @@
+module Quebee
+
 class Query
   include DataMapper::Resource
   
@@ -68,4 +70,6 @@ SELECT * FROM auth_actions;
 END
     q.save!
   end
+end
+
 end

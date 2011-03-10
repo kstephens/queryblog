@@ -1,3 +1,4 @@
+module Auth
 
 class AuthBuilder
 
@@ -161,3 +162,4 @@ class AuthBuilder
 
 end
 
+end

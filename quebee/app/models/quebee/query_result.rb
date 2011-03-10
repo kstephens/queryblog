@@ -1,5 +1,6 @@
-require 'csv_result'
+require 'quebee/csv_result'
 
+module Quebee
 
 class QueryResult
   include DataMapper::Resource
@@ -154,3 +155,4 @@ class QueryResult
   end
 end
 
+end

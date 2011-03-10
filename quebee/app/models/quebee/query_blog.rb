@@ -1,3 +1,5 @@
+module Quebee
+
 class QueryBlog
 
   def self.auto_migrate!
@@ -5,4 +7,6 @@ class QueryBlog
     AuthUser.initialize!
     Query.initialize!
   end
+end
+
 end

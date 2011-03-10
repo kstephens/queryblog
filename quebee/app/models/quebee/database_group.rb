@@ -1,3 +1,5 @@
+module Quebee
+
 class DatabaseGroup
   include DataMapper::Resource
   
@@ -5,5 +7,7 @@ class DatabaseGroup
 
   property :name, String
   property :description, Text
+
+end
 
 end

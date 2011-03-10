@@ -1,3 +1,4 @@
+module Auth
 
 # Represents authorization roles associated with users.
 class AuthRole
@@ -17,4 +18,6 @@ class AuthRole
   before :save do
     AuthBuilder.before_save self
   end
+end
+
 end

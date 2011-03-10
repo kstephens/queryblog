@@ -1,3 +1,4 @@
+module Auth
 
 # Represents an action that can be applied to a object by an authorized user.
 class AuthAction
@@ -17,4 +18,6 @@ class AuthAction
   before :save do
     AuthBuilder.before_save self
   end
+end
+
 end

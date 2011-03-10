@@ -1,3 +1,4 @@
+module Auth
 
 # Maps roles and actions.
 class AuthRoleAction
@@ -22,7 +23,7 @@ class AuthRoleAction
 end
 
 
-require 'auth_role'
+require 'auth/auth_role'
 class AuthRole
   has 0 .. n, :role_actions, :child_key => [ :role_id ], :class_name => 'AuthRoleAction'
 
@@ -32,3 +33,4 @@ class AuthRole
   end
 end
 
+end

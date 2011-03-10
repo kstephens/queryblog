@@ -1,3 +1,5 @@
+module Quebee
+
 class DatabaseServer
   include DataMapper::Resource
   
@@ -14,3 +16,4 @@ class DatabaseServer
   has 0 .. n, :slaves, :class_name => 'DatabaseServer'
 end
 
+end

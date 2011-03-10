@@ -1,3 +1,5 @@
+module Quebee
+
 class Comment
   include DataMapper::Resource
   
@@ -18,3 +20,5 @@ class Comment
   end
 
 end
+
+end # module

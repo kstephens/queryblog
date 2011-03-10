@@ -1,3 +1,6 @@
+
+module Quebee
+
 # This is a default user class used to activate merb-auth.  Feel free to change from a User to 
 # Some other class, or to remove it altogether.  If removed, merb-auth may not work by default.
 #
@@ -24,5 +27,7 @@ class User
     self.created_on ||= Time.now
     self.enable_login = true if self.enable_login.nil?
   end
+
+end
 
 end

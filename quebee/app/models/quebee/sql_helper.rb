@@ -1,3 +1,5 @@
+module Quebee
+
 module SqlHelper
   def self.sql_query(repos, sql, *params)
     result = [ ]
@@ -23,4 +25,6 @@ module SqlHelper
     # $stderr.puts "do_sql #{sql.split("\n").first} =>\n  #{result.map{|x| x.inspect}.join("\n  ")}"
     [ columns, types, result ]
   end
+end
+
 end

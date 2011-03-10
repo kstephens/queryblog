@@ -1,3 +1,5 @@
+module Auth
+
 class AuthUserRole
   include DataMapper::Resource
   
@@ -17,7 +19,7 @@ class AuthUserRole
   end
 end
 
-require 'auth_user'
+require 'auth/auth_user'
 class AuthUser
   has 0 .. n, :user_actions, :child_key => [ :user_id ], :class_name => 'AuthUserAction'
   has 0 .. n, :user_roles,   :child_key => [ :role_id ], :class_name => 'AuthUserRole'
@@ -34,4 +36,4 @@ class AuthUser
   end
 end
 
-
+end

@@ -1,3 +1,5 @@
+module Quebee
+
 class DatabaseUser
   include DataMapper::Resource
   
@@ -8,4 +10,6 @@ class DatabaseUser
 
   property :username, String
   property :password, String
+end
+
 end

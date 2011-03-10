@@ -1,3 +1,5 @@
+module Quebee
+
 class Database
   include DataMapper::Resource
   
@@ -7,4 +9,6 @@ class Database
   property :description, Text
 
   belongs_to :database_type, :class_name => 'DatabaseType'
+end
+
 end

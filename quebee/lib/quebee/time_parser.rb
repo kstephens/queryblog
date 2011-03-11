@@ -11,7 +11,7 @@ module Quebee
 
     def initialize
       @input = ''
-      @unit_for_now = { :today => :day, }
+      @unit_for_now = { :today => :day, :t => nil }
       @debug = false # true
       @token = nil
       @token_stack = [ ]
@@ -63,9 +63,9 @@ module Quebee
       if (interval = p_interval)
         case 
         when (direction = p_relation) && (time = p_time_expr)
-          time + (interval * direction.value)
+          time + (interval * direction)
         when (direction = p_relative)
-          Now.new(now, interval) + (interval * direction.value)
+          Now.new(now, interval) + (interval * direction)
         end
       end
     end
@@ -88,13 +88,13 @@ module Quebee
     # before|after|since
     def _p_relation
       token.type == :relation && 
-        take_token
+        take_token.value
     end
 
     # ago
     def _p_relative
       token.type == :relative && 
-        take_token
+        take_token.value
     end
 
     # + interval
@@ -262,14 +262,17 @@ module Quebee
         value = TimeRelative.new
         value.hour = hour
         type = :time_relative
-      when /\A(\d+)/
+      when /\A([-+]?\d+\.\d*|\.\d+)/
+        value = $1.to_f
+        type = :number
+      when /\A([-+]?\d+)/
         value = $1.to_i
         type = :number
       when /\A(\+|\-|plus\b|minus\b|in\b)/i
         value = $1.downcase.to_sym
         value = @@operation_alias[value] || value
         type = :operation
-      when /\A(today|now)\b/i
+      when /\A(today|now|t)\b/i
         value = Now.new(now, unit_for_now($1))
       when /\A(yesterday)\b/i
         value = Now.new(now, :day) - 1
@@ -716,6 +719,13 @@ module Quebee
   end
 
   def self.test
+    test_chronic = false
+    if test_chronic
+      gem 'chronic'
+      require 'chronic'
+      Chronic.debug = true
+    end
+
     debug = false
     now = Time.parse("2011-03-10T15:10:37.981304-06:00")
     now_iso8601 = now.iso8601
@@ -733,7 +743,7 @@ module Quebee
      '5 days before now',
      '3 days before this minute',
      '5 days before yesterday',
-     '2 days before 47 hours after tomorrow',
+     '2 days before 50 hours after tomorrow',
      '1pm',
      '12:30pm',
      '9:20am tomorrow',
@@ -749,22 +759,33 @@ module Quebee
      now_iso8601_6,
      "#{now_iso8601} plus 10 sec",
      "#{now_iso8601_6} - 2 weeks",
+     "now minus 2.5 weeks",
+     "t - 10 sec",
     ].each do | str |
       if str == :debug
         debug = true
         next
       end
+      puts "#{str.inspect} =>"
       begin
-        puts "str = #{str.inspect}"
         p = TimeParser.new
         p.debug = debug
         p.now = now
         # debugger
         t = p.parse(str)
-        puts "t = #{t.inspect}"
-        puts "t.to_range = #{t.to_range.inspect}" if t.respond_to?(:to_range)
+        puts "  #{t.inspect}"
+        puts "  range #{t.to_range.inspect}" if t.respond_to?(:to_range)
       rescue TimeParser::Error => err
-        puts "e = #{err.inspect}"
+        puts "ERROR: #{err.inspect}"
+      end
+
+      if test_chronic
+        begin
+          t = ::Chronic.parse(str)
+          puts "  chronic #{t.inspect}"
+        rescue Exception => err
+          puts "ERROR: #{err.inspect}"
+        end
       end
     end
   end

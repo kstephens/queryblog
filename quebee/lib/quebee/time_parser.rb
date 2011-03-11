@@ -1,4 +1,5 @@
 require 'time'
+require 'rational'
 require 'rubygems'
 gem 'ruby-debug'
 require 'ruby-debug'
@@ -38,6 +39,9 @@ module Quebee
         v
       when v = p_time_or_date_relative
         v
+      when r = p_relation
+        v = p_time_expr
+        v += r
       else
         return nil
       end
@@ -65,7 +69,7 @@ module Quebee
         when (direction = p_relation) && (time = p_time_expr)
           time + (interval * direction)
         when (direction = p_relative)
-          Now.new(now, interval) + (interval * direction)
+          TimeWithUnit.new(now, interval) + (interval * direction)
         end
       end
     end
@@ -76,11 +80,11 @@ module Quebee
       when Numeric 
         amount = take_token.value
         case
-        when Interval === token.value
+        when TimeInterval === token.value
           interval = take_token.value
           interval *= amount
         end
-      when Interval
+      when TimeInterval
         interval = take_token.value
       end
     end
@@ -104,7 +108,7 @@ module Quebee
     end
 
     def _p_time
-      Now === token.value && 
+      TimeWithUnit === token.value && 
         take_token.value
     end
 
@@ -128,7 +132,7 @@ module Quebee
       t = p_time_expr || now
       # debugger
       tr.merge!(t)
-      t = Now.new(tr.to_time, unit)
+      t = TimeWithUnit.new(tr.to_time, unit)
       # $stderr.puts "  tr = #{tr.inspect} dr = #{dr.inspect} => t = #{t.inspect}"
       t
     end
@@ -223,7 +227,7 @@ module Quebee
       when ''
         return EOS
       when /\A(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(-[\d:]+)?)\b/ # iso8601
-        value = Now.new(Time.parse($1), nil)
+        value = TimeWithUnit.new(Time.parse($1), nil)
       when /\A(year\s+(\d+))/i
         year = $2 && $2.to_i
         value = TimeRelative.new
@@ -278,17 +282,17 @@ module Quebee
         value = @@operation_alias[value] || value
         type = :operation
       when /\A(today|now|t)\b/i
-        value = Now.new(now, unit_for_now($1))
+        value = TimeWithUnit.new(now, unit_for_now($1))
       when /\A(yesterday)\b/i
-        value = Now.new(now, :day) - 1
+        value = TimeWithUnit.new(now, :day) - 1
       when /\A(tomorrow)\b/i
-        value = Now.new(now, :day) + 1
-      when /\A((this)\s+(#{Unit::UNIT_REGEXP}))\b/io
-        value = Now.new(now, $3)
-      when /\A((previous|last|next)\s+(#{Unit::UNIT_REGEXP}))\b/io
-        value = Now.new(now, $3) + Interval.new($2, $3)
-      when /\A((#{Unit::UNIT_REGEXP})s?)\b/io
-        value = Interval.new(1, $2)
+        value = TimeWithUnit.new(now, :day) + 1
+      when /\A((this)\s+(#{TimeUnit::UNIT_REGEXP}))\b/io
+        value = TimeWithUnit.new(now, $3)
+      when /\A((previous|last|next)\s+(#{TimeUnit::UNIT_REGEXP}))\b/io
+        value = TimeWithUnit.new(now, $3) + TimeInterval.new($2, $3)
+      when /\A((#{TimeUnit::UNIT_REGEXP})s?)\b/io
+        value = TimeInterval.new(1, $2)
       when /\A((ago))\b/i
         value = $1.downcase.to_sym
         value = @@direction_alias[value]
@@ -346,7 +350,7 @@ module Quebee
       'EOS'
     end
 
-    module Unit
+    module TimeUnit
       attr_reader :unit
 
       def new *args
@@ -359,7 +363,7 @@ module Quebee
         when String
           @unit = @unit.downcase.to_sym
           @unit = @@unit_alias[@unit] || @unit
-        when Interval, Now
+        when TimeInterval, TimeWithUnit
           @unit = @unit.unit
         else
           raise ArgumentError, @unit.inspect
@@ -399,8 +403,8 @@ module Quebee
         :millenium => (60 * 60 * 24) * 365000,
       }
 
-      def unit_multiplier
-        @@unit_interval[@unit] || 1
+      def unit_multiplier unit = @unit
+        @@unit_interval[unit] || 1
       end
  
       UNIT_REGEXP = 
@@ -411,16 +415,16 @@ module Quebee
         map{|x| x.to_s}.
         reject{|x| x.empty?}.
         sort{|a, b| b.size <=> a.size} * '|'
+      # $stderr.puts "UNIT_REGEXP = #{UNIT_REGEXP}"
 
-      $stderr.puts "UNIT_REGEXP = #{UNIT_REGEXP}"
       def unit_interval
         @unit_interval ||=
-          Interval.new(1, @unit)
+          TimeInterval.new(1, @unit)
       end
     end
 
-    class Interval
-      include Unit
+    class TimeInterval
+      include TimeUnit
       include Comparable
       attr_reader :amount
 
@@ -430,13 +434,17 @@ module Quebee
       end
 
       def to_unit! unit
+        @amount *= unit_multiplier(unit).to_r / unit_multipler
+        @unit = unit
+        normalize!
+        self
       end
 
       def + amount
         case x
         when Numeric
           new(@amount + x, @unit)
-        when Interval
+        when TimeInterval
           new(@amount.to_sec + x.to_sec, :second)
         end
       end
@@ -445,7 +453,7 @@ module Quebee
         case x
         when Numeric
           new(@amount - x, @unit)
-        when Interval
+        when TimeInterval
           new(@amount.to_sec - x.to_sec, :second)
         end
       end
@@ -463,7 +471,7 @@ module Quebee
         case x
         when Numeric
           new(@amount / x, @unit)
-        when Interval
+        when TimeInterval
           @amount.to_sec / x.to_sec
         end
       end
@@ -477,11 +485,11 @@ module Quebee
         when String, Symbol
           @amount = 
             case @amount.to_s
-            when /\Athis\b/i
+            when /\A(?:this)\b/i
               0
-            when /\Alast|previous\b/i
+            when /\A(?:last|previous)\b/i
               -1
-            when /\Anext|after\b/i
+            when /\A(?:next|after)\b/i
               1
             else
               raise ArgumentError, amount.inspect
@@ -498,7 +506,7 @@ module Quebee
 
       def <=> x
         case x
-        when Interval
+        when TimeInterval
           to_sec <=> x.to_sec
         when Numeric
           to_sec <=> x
@@ -509,7 +517,7 @@ module Quebee
     end
 
     class TimeRelative
-      include Unit
+      include TimeUnit
       SLOTS = [ :year, :mon, :day, :hour, :min, :sec, :zone ].freeze
       attr_accessor *SLOTS
 
@@ -579,8 +587,8 @@ module Quebee
       end
     end
 
-    class Now
-      include Unit
+    class TimeWithUnit
+      include TimeUnit
       include Comparable
       attr_reader :time
 
@@ -593,9 +601,9 @@ module Quebee
         # debugger
         case amount
         when Numeric
-          amount = Interval.new(amount, @unit)
+          amount = TimeInterval.new(amount, @unit)
         end
-        raise TypeError, amount.to_s unless Interval === amount
+        raise TypeError, amount.to_s unless TimeInterval === amount
         new(@time + amount.to_sec, 
             [ unit_interval, amount.unit_interval ] )
       end
@@ -603,14 +611,14 @@ module Quebee
       def - x
         case x
         when Numeric
-          x = Interval.new(x, @unit)
+          x = TimeInterval.new(x, @unit)
         end
         case x
-        when Interval
+        when TimeInterval
           new(@time - x.to_sec,
               [ unit_interval, x.unit_interval ])
-        when Now, Time
-          Interval.new(@time.to_f - x.to_f, :second)
+        when TimeWithUnit, ::Time
+          TimeInterval.new(@time.to_f - x.to_f, :second)
         else
           raise TypeError, x.inspect
         end
@@ -626,7 +634,7 @@ module Quebee
 
       def <=> x
         case x
-        when Now
+        when TimeWithUnit
           @time <=> x.to_time
         else
           @time <=> x
@@ -646,12 +654,12 @@ module Quebee
           return
         when ::Time
         when String
-          @time = Time.parse(@time)
+          @time = ::Time.parse(@time)
         when Numeric
-          @time = Time.utc(@time)
+          @time = ::Time.utc(@time)
         when ::Date
           @time = @time.to_time
-        when Now
+        when TimeWithUnit
           @time = @time.to_time
         else
           raise TypeError, @time.inspect
@@ -725,95 +733,96 @@ module Quebee
         (self ... (self + unit_interval))
       end
     end
-  end
 
-  def self.test
-    test_chronic = false
-    if test_chronic
-      gem 'chronic'
-      require 'chronic'
-      Chronic.debug = true
-    end
-
-    debug = false
-    now = Time.parse("2011-03-10T15:10:37.981304-06:00")
-    now_iso8601 = now.iso8601
-    now_iso8601_6 = now.iso8601(6)
-    puts "now = #{now.iso8601(6)}"
-    strs = [
-     'now',
-     'today',
-     'tomorrow',
-     'yesterday',
-     '10 days ago',
-     '10 s ago',
-     '3 days before today',
-     '5 days after today',
-     '5 days before now',
-     '3 days before this minute',
-     '5 days before yesterday',
-     '2 days before 50 hours after tomorrow',
-     '1pm',
-     '12:30pm',
-     '9:20am tomorrow',
-     '6am 3 days from yesterday',
-     '2001/01',
-     '2001/02/03 12:23pm',
-     '12/31 12:59pm',
-     '12/31 last year',
-     '12:59:59pm 12/31 next year',
-     '1:23:45pm 1/2 in 2 years',
-     # :debug,
-     now_iso8601,
-     now_iso8601_6,
-     "#{now_iso8601} plus 10 sec",
-     "#{now_iso8601_6} - 2 weeks",
-     "now minus 2.5 weeks",
-     "t - 10 sec",
-     "123.45 sec ago",
-     "year 2010",
-     # "+- 123.45 sec ago",
-     # :readline,
-     :readlines,
-    ]
-
-    strs.each do | str |
-      if str == :readlines
-        strs << str
-        str = :readline
-      end
-      case str
-      when :readline
-        $stderr.write " > "
-        str = $stdin.readline
-      when :debug
-        debug = true
-        next
-      end
-      puts "#{str.inspect} =>"
-      begin
-        p = TimeParser.new
-        p.debug = debug
-        p.now = now
-        # debugger
-        t = p.parse(str)
-        puts "  #{t.inspect}"
-        puts "  range #{t.to_range.inspect}" if t.respond_to?(:to_range)
-      rescue TimeParser::Error => err
-        puts "ERROR: #{err.inspect}"
-      end
-
+    def self.test
+      test_chronic = false
       if test_chronic
+        gem 'chronic'
+        require 'chronic'
+        Chronic.debug = true
+      end
+      
+      debug = false
+      now = ::Time.parse("2011-03-10T15:10:37.981304-06:00")
+      now_iso8601 = now.iso8601
+      now_iso8601_6 = now.iso8601(6)
+      puts "now = #{now.iso8601(6)}"
+      strs = [
+              'now',
+              'today',
+              'tomorrow',
+              'yesterday',
+              '10 days ago',
+              '10 s ago',
+              '3 days before today',
+              '5 days after today',
+              '5 days before now',
+              '3 days before this minute',
+              '5 days before yesterday',
+              '2 days before 50 hours after tomorrow',
+              '1pm',
+              '12:30pm',
+              '9:20am tomorrow',
+              '6am 3 days from yesterday',
+              '2001/01',
+              '2001/02/03 12:23pm',
+              '12/31 12:59pm',
+              '12/31 last year',
+              '12:59:59pm 12/31 next year',
+              '1:23:45pm 1/2 in 2 years',
+              # :debug,
+              now_iso8601,
+              now_iso8601_6,
+              "#{now_iso8601} plus 10 sec",
+              "#{now_iso8601_6} - 2 weeks",
+              "now minus 2.5 weeks",
+              "t - 10 sec",
+              "123.45 sec ago",
+              "year 2010",
+              # "+- 123.45 sec ago",
+              # :readline,
+              :readlines,
+             ]
+      
+      strs.each do | str |
+        if str == :readlines
+          strs << str
+          str = :readline
+        end
+        case str
+        when :readline
+          $stderr.write " > "
+          str = $stdin.readline
+        when :debug
+          debug = true
+          next
+        end
+        puts "#{str.inspect} =>"
         begin
-          t = ::Chronic.parse(str)
-          puts "  chronic #{t.inspect}"
-        rescue Exception => err
+          p = TimeParser.new
+          p.debug = debug
+          p.now = now
+          # debugger
+          t = p.parse(str)
+          puts "  #{t.inspect}"
+          puts "  range #{t.to_range.inspect}" if t.respond_to?(:to_range)
+        rescue TimeParser::Error => err
           puts "ERROR: #{err.inspect}"
         end
+        
+        if test_chronic
+          begin
+            t = ::Chronic.parse(str)
+            puts "  chronic #{t.inspect}"
+          rescue Exception => err
+            puts "ERROR: #{err.inspect}"
+          end
+        end
       end
-    end
-  end
-  self.test
-end
+    end # def self.test
+
+  end # class
+end # module
+
 
 

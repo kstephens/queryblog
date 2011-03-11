@@ -104,7 +104,7 @@ module Application
         x = uri_path.split('/')
         x[0] = x[0].singularize
         x.join('/')
-      end
+      end.freeze
   end
   protected :uri_action
 

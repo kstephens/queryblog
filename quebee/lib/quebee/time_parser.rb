@@ -224,6 +224,11 @@ module Quebee
         return EOS
       when /\A(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(-[\d:]+)?)\b/ # iso8601
         value = Now.new(Time.parse($1), nil)
+      when /\A(year\s+(\d+))/i
+        year = $2 && $2.to_i
+        value = TimeRelative.new
+        value.year = year
+        type = :date_relative
       when /\A((\d{4})(?:([-\/])(0?[1-9]|1[0-2])(?:\3([0-2][0-9]|3[01]))?))\b/i
                year = $2 && $2.to_i
                          sep = $3
@@ -464,6 +469,8 @@ module Quebee
       end
 
       def normalize!
+        @unit = nil if Float === @amount
+
         super
 
         case @amount
@@ -508,6 +515,8 @@ module Quebee
 
       def unit
         case 
+        when Float === @sec
+          nil
         when @sec
           :sec
         when @min
@@ -731,7 +740,7 @@ module Quebee
     now_iso8601 = now.iso8601
     now_iso8601_6 = now.iso8601(6)
     puts "now = #{now.iso8601(6)}"
-    [
+    strs = [
      'now',
      'today',
      'tomorrow',
@@ -761,8 +770,23 @@ module Quebee
      "#{now_iso8601_6} - 2 weeks",
      "now minus 2.5 weeks",
      "t - 10 sec",
-    ].each do | str |
-      if str == :debug
+     "123.45 sec ago",
+     "year 2010",
+     # "+- 123.45 sec ago",
+     # :readline,
+     :readlines,
+    ]
+
+    strs.each do | str |
+      if str == :readlines
+        strs << str
+        str = :readline
+      end
+      case str
+      when :readline
+        $stderr.write " > "
+        str = $stdin.readline
+      when :debug
         debug = true
         next
       end

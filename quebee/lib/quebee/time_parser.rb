@@ -1,8 +1,12 @@
 require 'time'
 require 'rational'
 require 'rubygems'
-gem 'ruby-debug'
-require 'ruby-debug'
+gem 'treetop'
+
+if $DEBUG
+  gem 'ruby-debug'
+  require 'ruby-debug'
+end
 
 module Quebee
   class TimeParser
@@ -39,8 +43,7 @@ module Quebee
         v
       when v = p_time_or_date_relative
         v
-      when r = p_relation
-        v = p_time_expr
+      when (r = p_relation) && (v = p_time_expr)
         v += r
       else
         return nil

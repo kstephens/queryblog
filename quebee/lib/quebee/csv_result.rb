@@ -49,6 +49,7 @@ class CsvResult
   # Add a column with a type.
   def add_column name, type = nil
     type ||= 'String'
+    type = type.name if Module === type
 
     @columns ||= [ ]
     @column_by_name ||= { }
@@ -120,7 +121,7 @@ class CsvResult
 
   def _write_row row
     row_index[@number_of_rows] = @row_file.tell
-    $stderr.puts "  _write_row(#{row.inspect}) @ #{@row_file.tell}"
+    $stderr.puts "  _write_row(#{row.inspect}) @ #{@row_file.tell}" if @verbose
     @row_file.write(row.to_csv)
     @number_of_rows += 1
   end
@@ -289,7 +290,7 @@ class CsvResult
         @@instance_cache[name] ||
           Type.new(:name => name)
       else
-        raise ArgumentError
+        raise ArgumentError, "given #{name.class}"
       end
     end
 
@@ -298,7 +299,7 @@ class CsvResult
     end
 
     def inspect
-      "#<#{self.class} #{@name}>"
+      "#<#{self.class} #{@name.inspect}>"
     end
   end
 

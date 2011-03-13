@@ -36,7 +36,7 @@ class QueryExecution
 
 
   def split_statements code = nil
-    code ||= query.code
+    code ||= @code || query.code
     statements = code.to_s.split(/\s*^\s*;;\s*$\s*/m)
     statements = statements.map { | x | x.sub(/\s*;\s*\Z/, '') + ';' }
   end
@@ -44,6 +44,7 @@ class QueryExecution
 
   def execute! opts = { }
     return false if self.aborted_by
+    @code ||= opts[:code] || query.code
     self.query_results_count ||= 0
     self.started_on = Time.now
     self.save!

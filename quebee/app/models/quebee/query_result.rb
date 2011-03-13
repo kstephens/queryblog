@@ -6,13 +6,14 @@ class QueryResult
   include DataMapper::Resource
   include Auth::Tracking
 
-  property :uuid, String
+  property :uuid, String, :required => true
 
-  property :statement, Text
+  property :statement, Text, :required => true
 
-  property :started_on, Time
+  property :started_on, Time, :required => true
   property :completed_on, Time
   property :elapsed_time, Float
+
   property :error, Text
   property :backtrace, Text
 
@@ -20,10 +21,10 @@ class QueryResult
   property :number_of_bytes, Integer
 
   belongs_to :query_execution, :model => 'QueryExecution'
-  property :query_results_index, Integer
+  property :query_results_index, Integer, :required => true
 
-  property :query_is_sensitive, Boolean
-  property :result_is_sensitive, Boolean
+  property :query_is_sensitive, Boolean, :required => true
+  property :result_is_sensitive, Boolean, :required => true
  
   has_tags_on :tags
 
@@ -34,22 +35,31 @@ class QueryResult
   end
 
 
+  UUID_FILE = '/proc/sys/kernel/random/uuid'.freeze
+  @@uuid = nil
+
   def make_random_uuid
-    File.open('/proc/sys/kernel/random/uuid') do | fh |
-      fh.readline.chomp!
+    if File.exist?(file = UUID_FILE)
+      File.read(file).chomp!
+    else
+      unless @uuid
+        require 'uuid'
+        @@uuid = UUID.new
+      end
+      @@uuid.generate
     end
   end
 
 
   def self.base_dir
     @@base_dir ||=
-      "query_result"
+      "quebee/query_result".freeze
   end
 
 
   def filename
     @filename ||=
-      "public#{uri}"
+      "public#{uri}".freeze
   end
 
 
@@ -60,21 +70,25 @@ class QueryResult
 
   def uri
     @uri ||=
-      "/#{self.class.base_dir}/#{uuid}.csv"
+      "/#{self.class.base_dir}/#{uuid}.csv".freeze
   end
 
 
   def execute!
+    # self.class.raise_on_save_failure = true
+    self.created_by ||= query_execution.created_by
     self.started_on = Time.now
     self.save!
+    debugger if self.id == nil
 
-    columns, types, rows = SqlHelper.sql_query(nil, self.statement)
+    columns, types, rows = Auth::SqlHelper.sql_query(nil, self.statement)
 
     r = csv_result
 
     i = -1
     columns.each do | c |
       t = types[i += 1]
+      # $stderr.puts "  i = #{i}: c = #{c.inspect} t = #{t.inspect}"
       csv_result.add_column(c, t)
     end
 
@@ -86,6 +100,8 @@ class QueryResult
 
     self.number_of_rows = rows.size + 2
     self.number_of_bytes = nil
+
+    self
 
   rescue Exception => err
     self.error = err.inspect
@@ -136,13 +152,14 @@ class QueryResult
   end
 
 
-  before :save do
+  before :valid? do
     self.query_is_sensitive  ||= false
     self.result_is_sensitive ||= false
     if File.exist?(filename)
       self.number_of_rows  ||= csv_result.number_of_rows
       self.number_of_bytes ||= File.size(filename)
     end
+    self
   end
 
   after :save do

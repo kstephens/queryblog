@@ -41,6 +41,8 @@ gem 'simplest_auth'
 gem 'wirble'
 gem 'json'
 gem 'haml'
+gem 'uuid'
+gem 'fastercsv'
 
 group(:development, :test) do
 

@@ -49,7 +49,7 @@ class Query
     qe = QueryExecution.new(options)
     qe.save!
 
-    qe.execute!
+    qe.execute!(:code => self.code)
     qe.save!
 
     qe
@@ -63,9 +63,9 @@ class Query
                  :name => "List Users",
                  :description => "List users and auth_actions.",
                  :code => <<"END"
-SELECT * FROM users;
+SELECT * FROM auth_auth_users;
 ;;
-SELECT * FROM auth_actions;
+SELECT * FROM auth_auth_actions;
 ;;
 END
                  )

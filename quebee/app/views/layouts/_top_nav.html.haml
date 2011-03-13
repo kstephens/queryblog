@@ -5,17 +5,18 @@
 %div.top_menu
   = link_to 'Home', '/'
   |
-  = link_to 'Queries', '/queries'
+  = link_to 'Queries', '/quebee/queries'
   |
-  = link_to 'Executions', '/query_executions'
+  = link_to 'Executions', '/quebee/query_executions'
   |
-  = link_to 'Users', '/users'
+  = link_to 'Users', '/quebee/users'
   |
-  - if session.respond_to?(:user) && session.user
+  - if controller.authenticated_user
     Hello, 
-    = link_to session.user.login, "/users/#{session.user.id}"
-    = link_to '(logout)', '/login/logout'
+    = link_to controller.authenticated_user.login, "/quebee/users/#{session.user.id}"
+    = link_to '(logout)', '/auth/session/logout'
   - else
-    = link_to 'Login', '/login'
+    = link_to 'Login', '/auth/session/login'
 %hr.top_menu
+
 

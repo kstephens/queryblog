@@ -19,6 +19,6 @@
           = h query.query_executions_count
         %td
           - if controller.current_user_can_edit? query
-            = link_to 'Edit', query
+            = link_to 'Edit', "#{query.id}/edit"
 
 

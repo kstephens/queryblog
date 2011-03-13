@@ -35,6 +35,16 @@ class QueriesController < ApplicationController
   end
 
   def update
+    update_model! do | a |
+      case a
+      when :after_save
+        $stderr.puts "  params = #{params.inspect}"
+        if params[:commit] =~ /Execute/
+          redirect_to :id => model_instance, :action => :execute
+          :redirect
+        end
+      end
+    end
   end
 
   def destroy

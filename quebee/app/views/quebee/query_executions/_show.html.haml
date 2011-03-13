@@ -1,15 +1,15 @@
 %table
-  - if @show_query
+  - if @show_query && false
     %tr
       %th 
         Query
       %td
-        = link_to @query_execution.query.name, url(:query, @query_execution.query)
+        = link_to @query_execution.query.name.inspect, @query_execution.query
   %tr
     %th
       User
     %td
-      = link_to @query_execution.created_by.login, url(:user, @query_execution.created_by)
+      = link_to @query_execution.created_by.login, @query_execution.created_by
       at
       = h @query_execution.created_on
   %tr
@@ -41,5 +41,5 @@
   Results
 
 - for @query_result in @query_execution.query_results
-  = partial 'query_results/show'
+  = render :partial => 'quebee/query_results/show'
 

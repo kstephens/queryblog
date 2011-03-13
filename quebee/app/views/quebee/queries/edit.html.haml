@@ -2,19 +2,19 @@
   Edit Query
   = h @query.name.inspect
 
-= link_to 'Show', url(:query, @query)
+= link_to 'Show', @query
 |
-= link_to 'Back', url(:queries)
+= link_to 'Back', '../..'
 
 = error_messages_for :query
 
-= form_for(@query, :action => url(:query, @query)) do
+= form_for(@query, :action => "#{@query.id}/update") do
   %table
     %tr
       %th 
         Name
       %td
-        = text_field :name
+        = text_field :query, :name
     %tr
       %th 
         Description
@@ -24,19 +24,19 @@
       %th 
         Query
       %td><
-        = my_text_area @query, :query, :query, :cols => 80, :rows => [ @query.query_lines.size, 32 ].min
+        = my_text_area @query, :query, :code, :cols => 80, :rows => [ @query.query_lines.size, 32 ].min
     %tr
       %th 
         Sensitive?
       %td
         Query?
-        = check_box :query_is_sensitive
+        = check_box :query, :query_is_sensitive
         Result?
-        = check_box :result_is_sensitive
+        = check_box :query, :result_is_sensitive
  
   %p
-    = submit "Update"
-    = submit "Update and Execute"
+    = submit_tag "Update"
+    = submit_tag "Update and Execute"
 
 %hr
 
@@ -45,6 +45,6 @@
     Most recent execution of 
     = @query.query_executions_count
     executions.
-  = partial 'query_executions/show'
+  = render :partial => 'quebee/query_executions/show'
   %hr
  

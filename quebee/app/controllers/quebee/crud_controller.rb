@@ -13,7 +13,6 @@ module Quebee
         before_filter :index_model!, :only => [ :index ]
         before_filter :find_model!, :only => [ :show, :edit, :update, :destroy ]
         before_filter :new_model!, :only => [ :new, :create ]
-        around_filter :update_model!, :only => [ :update ]
         around_filter :destroy_model!, :only => [ :destroy ]
       end
     end
@@ -46,13 +45,15 @@ module Quebee
 
     def update_model!
       if self.model_instance.update_attributes(params[model_name])
-        yield
+        return if :redirect == yield(:before_save)
         if self.model_instance.save!
-          redirect_to '..'
+          return if :redirect == yield(:after_save) 
+          redirect_to :action => :edit
         else
           flash[:message] = "Could not update #{model_class_name}"
           (flash[:errors] ||= { })[model_name] = model_instance.errors
-          redirect_to '../edit'
+          return if :redirect == yield(:error)
+          redirect_to :action => :edit
         end
       end
     end
@@ -60,11 +61,11 @@ module Quebee
     def destroy_model!
       yield
       if self.destroy
-        redirect_to '../..'
+        redirect_to :action => :index
       else
         flash[:message] = "Could not destroy #{model_class_name}"
         (flash[:errors] ||= { })[model_name] = model_instance.errors
-        redirect_to '../..'
+        redirect_to :action => :index
       end
     end
 

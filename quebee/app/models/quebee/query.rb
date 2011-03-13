@@ -20,7 +20,7 @@ class Query
 
   def query_lines
     @query_lines ||=
-      query.split("\n")
+      code.split("\n")
   end
 
 

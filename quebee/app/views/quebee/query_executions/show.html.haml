@@ -1,11 +1,11 @@
 %h1
   Query Execution
-  = h @query_execution.query.name.inspect
+  = h @query_execution.query # .name.inspect
   = h "# #{@query_execution.query_executions_index}"
 
 %p
-  = link_to 'Back', url(:query_executions)
+  = link_to 'Back', '..'
 
 - @show_query = true
-= partial 'query_executions/show'
+= render :partial => 'show'
 

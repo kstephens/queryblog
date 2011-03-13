@@ -17,14 +17,14 @@ class AuthUser
     end
 
     AuthBuilder.new do 
-      self.class.created_by = self.class.system_user
-      self.class.created_on = Time.now
+      Tracking.created_by = Tracking.system_user
+      Tracking.created_on = Time.now
       
-      superuser = add_role(self.class.root_user, 'superuser')
+      superuser = add_role(Tracking.root_user, 'superuser')
 
       allow superuser, '*'
       
-      user_admin = add_role(self.class.root_user, 'user_admin')
+      user_admin = add_role(Tracking.root_user, 'user_admin')
 
       allow user_admin, 'user/new'
       allow user_admin, 'user/list'
@@ -33,7 +33,7 @@ class AuthUser
       allow user_admin, 'user/edit/*/password'
       allow user_admin, 'user/edit/*/enabled'
       
-      guest_role = add_role(self.class.guest_user, '*guest*')
+      guest_role = add_role(Tracking.guest_user, '*guest*')
       
       allow guest_role, 'user/new'
       allow guest_role, 'user/list'

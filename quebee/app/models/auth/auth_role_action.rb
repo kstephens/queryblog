@@ -3,11 +3,7 @@ module Auth
 # Maps roles and actions.
 class AuthRoleAction
   include DataMapper::Resource
-  
-  property :id, Serial
-
-  belongs_to :created_by, :child_key => [ :created_by ], :model => 'Auth::AuthUser'
-  property :created_on, Time
+  include Auth::Tracking
 
   belongs_to :role,   :child_key => [ :role_id ],   :model => 'Auth::AuthRole'
   belongs_to :action, :child_key => [ :action_id ], :model => 'Auth::AuthAction'
@@ -16,10 +12,6 @@ class AuthRoleAction
   property :expires_on, Time
 
   property :allow, Boolean
-
-  before :save do
-    AuthBuilder.before_save self
-  end
 end
 
 

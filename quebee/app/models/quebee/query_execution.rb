@@ -33,7 +33,6 @@ class QueryExecution
   before :save do
     self.query_is_sensitive ||= false
     self.result_is_sensitive ||= false
-    AuthBuilder.before_save self
     self.query_results_count ||= 0
   end
 

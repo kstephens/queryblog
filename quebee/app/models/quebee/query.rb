@@ -2,13 +2,9 @@ module Quebee
 
 class Query
   include DataMapper::Resource
-  
-  property :id, Serial
+  include Auth::Tracking
 
-  belongs_to :created_by, :child_key => [ :created_by_user_id ], :model => 'User'
-  property :created_on, Time
-
-  belongs_to :predecessor_query, :child_key => [ :predecessor_query_id ], :model => 'Query'
+  belongs_to :predecessor_query, :child_key => [ :predecessor_query_id ], :model => 'Query', :required => false
   
   property :name, String
   property :description, Text
@@ -34,7 +30,6 @@ class Query
     self.query_is_sensitive ||= false
     self.result_is_sensitive ||= false
     self.query_executions_count ||= 0
-    AuthBuilder.before_save self
   end
 
 
@@ -62,7 +57,8 @@ class Query
 
 
   def self.initialize!
-    Auth::AuthBuilder.created_by = User.first(:login => 'user')
+    self.raise_on_save_failure = true
+    Auth::Tracking.created_by = User.first(:login => 'user')
     q = self.new :name => "List Users", :code => <<"END"
 SELECT * FROM users;
 ;;
@@ -70,6 +66,8 @@ SELECT * FROM auth_actions;
 ;;
 END
     q.save!
+    # debugger
+    q
   end
 end
 

@@ -2,11 +2,7 @@ module Quebee
 
 class Report
   include DataMapper::Resource
-  
-  property :id, Serial
-
-  belongs_to :created_by, :child_key => [ :created_by_user_id ], :model => 'User'
-  property :created_on, Time
+  include Auth::Tracking
 
   belongs_to :query, :child_key => [ :predecessor_query_id ], :model => 'Query'
 
@@ -23,10 +19,8 @@ class Report
 
   property :result_is_sensitive, Boolean
  
-
   before :save do
     self.result_is_sensitive ||= false
-    AuthBuilder.before_save self
   end
 
 

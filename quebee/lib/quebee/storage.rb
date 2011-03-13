@@ -1,11 +1,11 @@
 module Quebee
 
-class QueryBlog
+class Storage
 
   def self.auto_migrate!
     DataMapper.auto_migrate!
     Auth::AuthUser.initialize!
-    Query.initialize!
+    Quebee::Query.initialize!
   end
 end
 

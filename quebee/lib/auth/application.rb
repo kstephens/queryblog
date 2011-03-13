@@ -13,7 +13,7 @@ module Application
   def current_user
     @current_user ||=
       authenticated_user ||
-      AuthBuilder.guest_user
+      Auth::Tracking.guest_user
   end
   protected :current_user
 
@@ -21,15 +21,15 @@ module Application
   before :initialize_created_by!
 
   def initialize_created_by!
-    AuthBuilder.created_by = current_user
-    AuthBuilder.created_on = Time.now
+    Auth::Tracking.created_by = current_user
+    Auth::Tracking.created_on = Time.now
   end
   protected :initialize_created_by!
 
 
   def authorizer
     @authorizer ||=
-      Authorizer.new(:user => current_user)
+      Auth::Authorizer.new(:user => current_user)
   end
   protected :authorizer
 

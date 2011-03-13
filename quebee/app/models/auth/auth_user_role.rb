@@ -2,21 +2,13 @@ module Auth
 
 class AuthUserRole
   include DataMapper::Resource
-  
-  property :id, Serial
-
-  property :created_on, Time
-  belongs_to :created_by, :child_key => [ :created_by ], :model => 'Auth::AuthUser'
+  include Auth::Tracking
 
   belongs_to :user, :child_key => [ :user_id ], :model => 'Auth::AuthUser'
   belongs_to :role, :child_key => [ :role_id ], :model => 'Auth::AuthRole'
 
   property :enabled, Boolean
   property :expires_on, Time
-
-  before :save do
-    AuthBuilder.before_save self
-  end
 end
 
 require 'auth/auth_user'

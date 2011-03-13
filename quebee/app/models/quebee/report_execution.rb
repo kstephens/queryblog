@@ -2,14 +2,12 @@ module Quebee
 
 class ReportExecution < QueryExecution
   include DataMapper::Resource
-  
-  property :id, Serial
+  include Auth::Tracking
 
   belongs_to :report, :model => 'Report'
   property :report_executions_index, Integer
 
   before :save do
-    AuthBuilder.before_save self
     self.query_results_count ||= 0
   end
 

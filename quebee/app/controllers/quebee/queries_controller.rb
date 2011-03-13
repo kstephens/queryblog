@@ -32,13 +32,23 @@ class QueriesController < ApplicationController
   end
 
   def create
+    create_model! do | a |
+      case a
+      when :after
+        # $stderr.puts "  params = #{params.inspect}"
+        if params[:commit] =~ /Execute/
+          redirect_to :id => model_instance, :action => :execute
+          :redirect
+        end
+      end
+    end
   end
 
   def update
     update_model! do | a |
       case a
-      when :after_save
-        $stderr.puts "  params = #{params.inspect}"
+      when :after
+        # $stderr.puts "  params = #{params.inspect}"
         if params[:commit] =~ /Execute/
           redirect_to :id => model_instance, :action => :execute
           :redirect

@@ -12,7 +12,7 @@ module Quebee
         before_filter :authorization_check!
         before_filter :index_model!, :only => [ :index ]
         before_filter :find_model!, :only => [ :show, :edit, :update, :destroy ]
-        before_filter :new_model!, :only => [ :new, :create ]
+        before_filter :new_model!, :only => [ :new ]
         around_filter :destroy_model!, :only => [ :destroy ]
       end
     end
@@ -45,22 +45,35 @@ module Quebee
 
     def update_model!
       if self.model_instance.update_attributes(params[model_name])
-        return if :redirect == yield(:before_save)
+        return if :redirect == block_given? && yield(:before)
         if self.model_instance.save!
-          return if :redirect == yield(:after_save) 
+          return if :redirect == block_given? && yield(:after) 
           redirect_to :action => :edit
         else
           flash[:message] = "Could not update #{model_class_name}"
           (flash[:errors] ||= { })[model_name] = model_instance.errors
-          return if :redirect == yield(:error)
+          return if :redirect == block_given? && yield(:error)
           redirect_to :action => :edit
         end
       end
     end
 
+    def create_model!
+      new_model!
+      return if :redirect == block_given? && yield(:before)
+      if self.model_instance.save!
+        return if :redirect == block_given? && yield(:after) 
+        redirect_to :action => :show, :id => self.model_instance
+      else
+        flash[:message] = "Could not create #{model_class_name}"
+        (flash[:errors] ||= { })[model_name] = model_instance.errors
+        return if :redirect == block_given? && yield(:error)
+        render :action => :new
+      end
+    end
+
     def destroy_model!
-      yield
-      if self.destroy
+      if self.model_instance.destroy
         redirect_to :action => :index
       else
         flash[:message] = "Could not destroy #{model_class_name}"

@@ -29,8 +29,8 @@
     %th
       Sensitive
     %td.left
-      = @query.query_is_sensitive  ? x = "Query" : ''
-      = @query.result_is_sensitive ? x = "Result" : ''
+      = @query.query_is_sensitive  ? x = "Query " : ''
+      = @query.result_is_sensitive ? x = "Result " : ''
       = x ? '' : '<i>Not Sensitive</i>'.html_safe
 
   %tr

@@ -5,10 +5,13 @@ class ReportExecution < QueryExecution
   include Auth::Tracking
 
   belongs_to :report, :model => 'Report'
-  property :report_executions_index, Integer
+  property :report_executions_index, Integer, :required => true
 
-  before :save do
-    self.query_results_count ||= 0
+  # has_tags_on :tags
+
+  before :valid? do
+    self.report_executions_index ||= 0
+    self
   end
 
 end

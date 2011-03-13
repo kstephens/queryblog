@@ -64,6 +64,9 @@ class AuthUser
       allow guest_role, 'quebee/query'
       allow guest_role, 'quebee/query/show/*'
 
+      allow guest_role, 'quebee/query_execution'
+      allow guest_role, 'quebee/query_execution/show/*'
+
       user = AuthUser.first(:login => 'user')
       basic_role = add_role(user, 'basic')
 
@@ -78,6 +81,9 @@ class AuthUser
       allow basic_role, 'quebee/query/new'
       allow basic_role, 'quebee/query/show/*'
       allow basic_role, 'quebee/query/execute/*'
+
+      allow basic_role, 'quebee/query_execution'
+      allow basic_role, 'quebee/query_execution/show/*'
     end
   end
 

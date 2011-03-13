@@ -104,6 +104,6 @@ module Auth
       obj
     end
     
-  end    
+  end
 end
 

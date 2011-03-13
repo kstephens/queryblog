@@ -7,15 +7,15 @@ class Query
 
   belongs_to :predecessor_query, :child_key => [ :predecessor_query_id ], :model => 'Query', :required => false
   
-  property :code, Text
+  property :code, Text, :required => true
 
   has 0 .. n, :query_executions, :model => 'QueryExecution', :order => [ :query_executions_index ]
-  property :query_executions_count, Integer
+  property :query_executions_count, Integer, :required => true
 
   has_tags_on :tags
 
-  property :query_is_sensitive, Boolean
-  property :result_is_sensitive, Boolean
+  property :query_is_sensitive, Boolean, :required => true
+  property :result_is_sensitive, Boolean, :required => true
  
 
   def query_lines
@@ -24,10 +24,11 @@ class Query
   end
 
 
-  before :save do
+  before :valid? do
     self.query_is_sensitive ||= false
     self.result_is_sensitive ||= false
     self.query_executions_count ||= 0
+    self
   end
 
 
@@ -37,6 +38,7 @@ class Query
       self.created_by
     options[:query] = self
 
+    self.query_executions_count ||= 0
     self.query_executions_count += 1
     self.save!
 
@@ -57,12 +59,17 @@ class Query
   def self.initialize!
     # self.raise_on_save_failure = true
     Auth::Tracking.created_by = User.first(:login => 'user') or raise 'User not found'
-    q = self.new :name => "List Users", :code => <<"END"
+    q = self.new(
+                 :name => "List Users",
+                 :description => "List users and auth_actions.",
+                 :code => <<"END"
 SELECT * FROM users;
 ;;
 SELECT * FROM auth_actions;
 ;;
 END
+                 )
+    q.valid?
     q.save!
     debugger
     q

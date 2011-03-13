@@ -1,61 +1,44 @@
 module Quebee
 
-class QueryExecutions < Application
-  # provides :xml, :yaml, :js
+class QueryExecutionsController < ApplicationController
+  include Auth::Application
+  include CrudController
+  respond_to :html, :xml, :json
 
-  def index
-    @query_executions = QueryExecution.all(:order => [ :started_on.desc ])
-    @show_query = true
-    display @query_executions
+  def index_model_options
+    [ :order => [ :started_on.desc ] ]
   end
 
-  def show(id)
-    @query_execution = QueryExecution.get(id)
-    raise NotFound unless @query_execution
-    display @query_execution
+  def index
+    @show_query = true
+    respond_to do | format |
+      format.html
+      format.xml { render :xml => model_instances.to_xml }
+      format.json { render :json => model_instances }
+    end
+  end
+
+  def show
+    respond_to do | format |
+      format.html
+      format.xml { render :xml => model_instance.to_xml }
+      format.json { render :json => model_instance.to_json }
+    end
   end
 
   def new
-    only_provides :html
-    @query_execution = QueryExecution.new
-    display @query_execution
   end
 
-  def edit(id)
-    only_provides :html
-    @query_execution = QueryExecution.get(id)
-    raise NotFound unless @query_execution
-    display @query_execution
+  def edit
   end
 
-  def create(query_execution)
-    @query_execution = QueryExecution.new(query_execution)
-    if @query_execution.save
-      redirect resource(@query_execution), :message => {:notice => "QueryExecution was successfully created"}
-    else
-      message[:error] = "QueryExecution failed to be created"
-      render :new
-    end
+  def create
   end
 
-  def update(id, query_execution)
-    @query_execution = QueryExecution.get(id)
-    raise NotFound unless @query_execution
-    if @query_execution.update_attributes(query_execution)
-       redirect resource(@query_execution)
-    else
-      display @query_execution, :edit
-    end
+  def update
   end
 
-  def destroy(id)
-    @query_execution = QueryExecution.get(id)
-    raise NotFound unless @query_execution
-    if @query_execution.destroy
-      redirect resource(:query_executions)
-    else
-      raise InternalServerError
-    end
+  def destroy
   end
 
 end # QueryExecutions

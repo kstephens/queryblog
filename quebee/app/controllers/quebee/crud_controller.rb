@@ -23,8 +23,12 @@ module Quebee
       self
     end
 
+    def index_model_options
+      [ ]
+    end
+
     def index_model!
-      self.model_instances = model_class.all
+      self.model_instances = model_class.all(*index_model_options)
       self
     end
 

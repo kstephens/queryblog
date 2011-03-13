@@ -13,8 +13,11 @@ class QueriesController < ApplicationController
     end
   end
 
+  def query_executions
+    @query_executions ||= @query.query_executions(:order => [ :started_on.desc ], :limit => 10)
+  end
+
   def show
-    @query_executions = @query.query_executions(:order => [ :started_on.desc ], :limit => 10)
     respond_to do | format |
       format.html
       format.xml { render :xml => model_instance.to_xml }
@@ -39,8 +42,9 @@ class QueriesController < ApplicationController
 
   def execute
     find_model!
+    $stderr.puts @query.code
     if qe = @query.execute!
-      redirect_to eq
+      redirect_to qe
     else
       raise InternalServerError
     end

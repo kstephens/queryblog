@@ -4,43 +4,47 @@ class QueryExecution
   include DataMapper::Resource
   include Auth::Tracking
 
-  belongs_to :aborted_by, :child_key => [ :aborted_by_user_id ], :model => 'User'
-  property :aborted_on, Time
+  belongs_to :aborted_by, :child_key => [ :aborted_by_user_id ], :model => 'User', :required => false
+  property :aborted_on, Time, :required => false
 
-  property :started_on, Time
-  property :completed_on, Time
+  property :started_on, Time, :required => true
+  property :completed_on, Time, :required => false
   property :elapsed_time, Float
 
   property :error, Text
   property :backtrace, Text
 
   belongs_to :query, :model => 'Query'
-  property :query_executions_index, Integer
+  property :query_executions_index, Integer, :required => true
 
   has 0 .. n, :query_results, :model => 'QueryResult', :order => [ :query_results_index ]
-  property :query_results_count, Integer
+  property :query_results_count, Integer, :required => true
 
-  property :query_is_sensitive, Boolean
-  property :result_is_sensitive, Boolean
+  property :query_is_sensitive, Boolean, :required => true
+  property :result_is_sensitive, Boolean, :required => true
  
   has_tags_on :tags
 
 
-  before :save do
+  before :valid? do
+    self.query_executions_index ||= 0
     self.query_is_sensitive ||= false
     self.result_is_sensitive ||= false
     self.query_results_count ||= 0
+    self
   end
 
 
-  def split_statements query = query.query
-    statements = query.split(/\s*^\s*;;\s*$\s*/m)
+  def split_statements code = nil
+    code ||= query.code
+    statements = code.to_s.split(/\s*^\s*;;\s*$\s*/m)
     statements = statements.map { | x | x.sub(/\s*;\s*\Z/, '') + ';' }
   end
 
 
   def execute! opts = { }
     return false if self.aborted_by
+    self.query_results_count ||= 0
     self.started_on = Time.now
     self.save!
 
@@ -59,6 +63,8 @@ class QueryExecution
       qr.execute!
     end
 
+    self
+
   rescue Exception => err
     self.error = err.inspect
     self.backtrace = err.backtrace * "\n"
@@ -73,6 +79,7 @@ class QueryExecution
   def abort! user = Auth::Tracking.authenticated_user
     self.aborted_by = user
     self.save!
+    self
   end
 end
 

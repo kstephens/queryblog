@@ -56,6 +56,7 @@ Quebee::Application.routes.draw do
   namespace :quebee do
     resources :users
     resources :queries
+    match 'queries/:id/execute' => 'queries#execute'
     resources :query_executions
     resources :query_results
   end

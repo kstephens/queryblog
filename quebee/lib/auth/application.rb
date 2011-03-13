@@ -108,7 +108,10 @@ module Application
 
   def uri_path
     @uri_path ||=
-      URI.parse(request.url).path.sub(/\A\//, '').sub(/\/\Z/, '')
+      URI.parse(request.url).path.
+      sub(/\A\//, '').
+      sub((x = params[:format]) ? ".#{x}" : '', '').
+      sub(/\/\Z/, '')
   end
 
 end

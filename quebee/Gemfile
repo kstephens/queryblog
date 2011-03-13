@@ -39,6 +39,7 @@ gem 'dm-ar-finders',        DM_VERSION
 
 gem 'simplest_auth'
 gem 'wirble'
+gem 'json'
 gem 'haml'
 
 group(:development, :test) do

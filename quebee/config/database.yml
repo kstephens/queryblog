@@ -1,42 +1,24 @@
----
-# This is a sample database file for the DataMapper ORM
-development: &defaults
-  adapter: postgresql
-  database: queryblog
-  host: 127.0.0.1
-#  port: 5434
-  port: 5432
-  username: queryblog
-  password: queryblog
-  
-  # These are the settings for repository :default
-  # adapter:  sqlite3
-  # database: sample_development.db
- 
+defaults: &defaults
+  adapter: sqlite
+
+development:
+  database: db/quebee_development.db
+  <<: *defaults
+
   # Add more repositories
   # repositories:
   #   repo1:
-  #     adapter:  sqlite3
-  #     database: sample_1_development.db
+  #     adapter:  postgres
+  #     database: sample_development
+  #     username: the_user
+  #     password: secrets
+  #     host:     localhost
   #   repo2:
   #     ...
 
-
 test:
-  <<:       *defaults
-  database: sample_test.db
- 
-  # repositories:
-  #   repo1:
-  #     database: sample_1_test.db
- 
+  database: db/quebee_test.db
+  <<: *defaults
 production:
-  <<:       *defaults
-  database: production.db
- 
-  # repositories:
-  #   repo1:
-  #     database: sample_production.db
- 
-rake:
+  database: db/quebee_production.db
   <<: *defaults

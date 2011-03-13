@@ -11,6 +11,11 @@
       = h @query_result.started_on
       for
       = h my_secs(@query_result.elapsed_time)
+  %tr
+    %th
+      EXPLAIN
+    %td
+      = my_pre @query_result.explanation
   - if @query_result.error
     %tr
       %th

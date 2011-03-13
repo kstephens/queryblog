@@ -9,6 +9,7 @@ class QueryResult
   property :uuid, String, :required => true
 
   property :statement, Text, :required => true
+  property :explanation, Text
 
   property :started_on, Time, :required => true
   property :completed_on, Time
@@ -77,10 +78,15 @@ class QueryResult
   def execute!
     # self.class.raise_on_save_failure = true
     self.created_by ||= query_execution.created_by
+
+    # EXPLAIN query.
+    columns, types, rows = Auth::SqlHelper.sql_query(nil, "EXPLAIN #{self.statement}")
+    self.explanation = rows * "\n"
     self.started_on = Time.now
     self.save!
     debugger if self.id == nil
 
+    # Run query.
     columns, types, rows = Auth::SqlHelper.sql_query(nil, self.statement)
 
     r = csv_result

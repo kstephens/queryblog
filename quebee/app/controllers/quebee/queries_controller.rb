@@ -1,3 +1,5 @@
+module Quebee
+
 class Queries < AuthenticatedController
   # provides :xml, :yaml, :js
   
@@ -82,3 +84,4 @@ class Queries < AuthenticatedController
   end
 end # Queries
 
+end

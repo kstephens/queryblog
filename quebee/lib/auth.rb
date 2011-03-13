@@ -8,4 +8,5 @@ require 'auth/tracking'
 require 'auth/auth_builder'
 require 'auth/authorizer'
 require 'auth/sql_helper'
+require 'auth/application'
 

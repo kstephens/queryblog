@@ -46,9 +46,24 @@ Quebee::Application.routes.draw do
   #     resources :products
   #   end
 
+  namespace :auth do
+    resources :sessions
+    resources :auth_users
+    resources :auth_roles
+    resources :auth_actions
+  end
+
+  namespace :quebee do
+    resources :users
+    resources :queries
+    resources :query_executions
+    resources :query_results
+  end
+
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
   # root :to => "welcome#index"
+  root :to => "quebee/home#index"
 
   # See how all your routes lay out with "rake routes"
 

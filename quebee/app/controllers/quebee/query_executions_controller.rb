@@ -1,3 +1,5 @@
+module Quebee
+
 class QueryExecutions < Application
   # provides :xml, :yaml, :js
 
@@ -57,3 +59,5 @@ class QueryExecutions < Application
   end
 
 end # QueryExecutions
+
+end

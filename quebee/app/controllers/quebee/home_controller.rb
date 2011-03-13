@@ -1,4 +1,7 @@
-class HomeController < Application
+module Quebee
+
+class HomeController < ApplicationController
+  include Auth::Application
 
   # ...and remember, everything returned from an action
   # goes to the client...
@@ -9,4 +12,6 @@ class HomeController < Application
     render
   end
   
+end
+
 end

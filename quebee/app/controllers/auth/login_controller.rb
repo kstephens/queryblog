@@ -1,4 +1,4 @@
-class Login < Application
+class LoginController < ApplicationController
 
   # ...and remember, everything returned from an action
   # goes to the client...

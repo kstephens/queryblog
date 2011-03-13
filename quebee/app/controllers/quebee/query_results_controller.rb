@@ -1,4 +1,6 @@
-class QueryResults < Application
+module Quebee
+
+class QueryResults < ApplicationController
   # provides :xml, :yaml, :js
 
   def index
@@ -6,7 +8,7 @@ class QueryResults < Application
     display @query_results
   end
 
-  def show(id)
+  def show
     @query_result = QueryResult.get(id)
     raise NotFound unless @query_result
     display @query_result
@@ -56,3 +58,5 @@ class QueryResults < Application
   end
 
 end # QueryResults
+
+end

@@ -1,5 +1,7 @@
 require 'nickle_slots'
 
+module Quebee
+
 class Users < AuthenticatedController
   # provides :xml, :yaml, :js
 
@@ -74,3 +76,5 @@ class Users < AuthenticatedController
   end
 
 end # Users
+
+end

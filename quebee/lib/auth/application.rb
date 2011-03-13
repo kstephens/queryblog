@@ -1,13 +1,20 @@
 module Auth
 module Application
+  def self.included target
+    super
+    target.instance_eval do
+      before_filter :initialize_created_by!
+    end
+  end
+
   def authenticated_user
-    user = session.user
+    user = session[:user_id]
+    user &&= User.find(user)
     if user && ! user.enable_login
-      user = session.user = nil
+      user = session[:user_id] = nil
     end
     user
   end
-  protected :authenticated_user
 
 
   def current_user
@@ -15,23 +22,18 @@ module Application
       authenticated_user ||
       Auth::Tracking.guest_user
   end
-  protected :current_user
 
-
-  before :initialize_created_by!
 
   def initialize_created_by!
     Auth::Tracking.created_by = current_user
     Auth::Tracking.created_on = Time.now
   end
-  protected :initialize_created_by!
 
 
   def authorizer
     @authorizer ||=
       Auth::Authorizer.new(:user => current_user)
   end
-  protected :authorizer
 
 
   def authenticated_user_can? action = nil
@@ -39,7 +41,6 @@ module Application
     authenticated_user && 
       authorizer.user_can_do?(*action.split('/'))
   end
-  protected :authenticated_user_can?
 
 
   def current_user_can_show? object, attr = nil
@@ -53,11 +54,10 @@ module Application
 
     result
   end
-  protected :current_user_can_show?
 
 
   def current_user_can_edit? object, attr = nil
-    action = (url(object.class.name.downcase / 'edit', object) / attr).sub(/\A\//, '')
+    action = "#{object.class.name.underscore}/edit/#{object.id}/#{attr}".sub(/\A\//, '').sub(%r{//+}, '')
 
     result = 
       current_user &&
@@ -67,7 +67,6 @@ module Application
 
     result
   end
-  protected :current_user_can_edit?
 
 
   def current_user_can? action = nil
@@ -80,7 +79,6 @@ module Application
 
     result
   end
-  protected :current_user_can?
 
 
   # Converts the uri_path
@@ -106,14 +104,12 @@ module Application
         x.join('/')
       end.freeze
   end
-  protected :uri_action
 
 
   def uri_path
     @uri_path ||=
       URI.parse(request.uri).path.sub(/\A\//, '').sub(/\/\Z/, '')
   end
-  protected :uri_path
 
 end
 

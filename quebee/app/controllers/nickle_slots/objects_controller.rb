@@ -1,6 +1,8 @@
 
+module NickleSlots
+
 # Provides a generic authenticated Ajax slot getter/setter controller.
-class Objects < Application # AuthenticatedController
+class Objects < ApplicationController # AuthenticatedController
   provides :xml, :yaml, :js
 
  
@@ -36,5 +38,6 @@ class Objects < Application # AuthenticatedController
       Authorizer.new(:user => current_user)
   end
 
-end # Objects
+end # ObjectsController
 
+end

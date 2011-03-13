@@ -1,0 +1,24 @@
+%div
+  %table
+    %tr
+      %th
+        Name
+      %th
+        User
+      %th
+        = '# Runs'
+      %th
+        = link_to 'New Query', quebee_queries_path(:new)
+    - for query in queries
+      %tr
+        %td
+          = link_to query.name, quebee_queries_path(query)
+        %td.center
+          = link_to query.created_by.login, quebee_users_path(query.created_by)
+        %td.integer
+          = h query.query_executions_count
+        %td
+          - if controller.current_user_can_edit? query
+            = link_to 'Edit', quebee_queries_path(query)
+
+

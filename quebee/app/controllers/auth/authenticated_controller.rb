@@ -1,4 +1,4 @@
-class AuthenticatedController < Application
+class AuthenticatedController < ApplicationController
   class AuthorizationError < ::Exception; end
 
   before :ensure_authenticated,

@@ -2,11 +2,8 @@ module Quebee
 
 class DatabaseServer
   include DataMapper::Resource
-  
-  property :id, Serial
-
-  property :name, String
-  property :description, Text
+  include Auth::Tracking
+  include Quebee::Named
 
   belongs_to :admin, :model => 'User'
 

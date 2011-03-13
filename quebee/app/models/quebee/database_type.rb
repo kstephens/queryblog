@@ -2,11 +2,8 @@ module Quebee
 
 class DatabaseType
   include DataMapper::Resource
-  
-  property :id, Serial
-
-  property :name, String
-  property :description, Text
+  include Auth::Tracking
+  include Quebee::Named
 
   property :adapter, String
 end

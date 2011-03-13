@@ -31,8 +31,8 @@ class Authorizer
   end
 
 
-  def self.user_can_do? u, a
-    new(:user => u).user_can_do?(a)
+  def self.user_can_do? u, *a
+    new(:user => u).user_can_do?(*a)
   end
 
 
@@ -198,9 +198,9 @@ SELECT
   a.name             AS action_name,
   ra.allow           AS allow
 FROM 
-  auth_roles         AS r,
-  auth_role_actions  AS ra,
-  auth_actions       AS a 
+  auth_auth_roles         AS r,
+  auth_auth_role_actions  AS ra,
+  auth_auth_actions       AS a 
 WHERE
       (r.id = ?)
   AND (r.enabled)
@@ -226,8 +226,8 @@ SELECT
   a.name             AS action_name,
   ua.allow           AS allow
 FROM 
-  auth_user_actions  AS ua,
-  auth_actions       AS a 
+  auth_auth_user_actions  AS ua,
+  auth_auth_actions       AS a 
 WHERE
       (ua.user_id = ?)
   AND (ua.enabled)
@@ -251,10 +251,10 @@ SELECT
   a.name             AS action_name,
   ra.allow           AS allow
 FROM 
-  auth_user_roles    AS ur, 
-  auth_roles         AS r,
-  auth_role_actions  AS ra,
-  auth_actions       AS a 
+  auth_auth_user_roles    AS ur, 
+  auth_auth_roles         AS r,
+  auth_auth_role_actions  AS ra,
+  auth_auth_actions       AS a 
 WHERE
       (ur.user_id = ?)
   AND (ur.enabled)

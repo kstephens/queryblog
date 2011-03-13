@@ -2,9 +2,8 @@ module Quebee
 
 class DatabaseSchema
   include DataMapper::Resource
-  
-  property :id, Serial
-
+  include Auth::Tracking
+  include Quebee::Named
 end
 
 end

@@ -7,6 +7,6 @@ module Auth
 
     module ClassMethods
     end
-  end    
+  end
 end
 

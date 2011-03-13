@@ -3,8 +3,7 @@ module Quebee
 # A user rating of a object.
 class Rating
   include DataMapper::Resource
-  
-  property :id, Serial
+  include Auth::Tracking
 
   property :rating, Float
 

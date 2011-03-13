@@ -2,13 +2,11 @@ module Quebee
 
 class DatabaseUser
   include DataMapper::Resource
-  
-  property :id, Serial
+  include Auth::Tracking
+  include Quebee::Named
 
-  property :created_on, Time
   belongs_to :user, :model => 'User'
 
-  property :username, String
   property :password, String
 end
 

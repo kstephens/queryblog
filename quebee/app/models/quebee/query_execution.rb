@@ -2,11 +2,7 @@ module Quebee
 
 class QueryExecution
   include DataMapper::Resource
-  
-  property :id, Serial
-
-  belongs_to :created_by, :child_key => [ :created_by_user_id ], :model => 'User'
-  property :created_on, Time
+  include Auth::Tracking
 
   belongs_to :aborted_by, :child_key => [ :aborted_by_user_id ], :model => 'User'
   property :aborted_on, Time
@@ -74,7 +70,7 @@ class QueryExecution
     self.save!
   end
 
-  def abort! user = AuthBuilder.authenticated_user
+  def abort! user = Auth::Tracking.authenticated_user
     self.aborted_by = user
     self.save!
   end

@@ -4,8 +4,7 @@ module Quebee
 
 class QueryResult
   include DataMapper::Resource
-  
-  property :id, Serial
+  include Auth::Tracking
 
   property :uuid, String
 

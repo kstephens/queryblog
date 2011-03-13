@@ -1,4 +1,4 @@
-module Quebee
+module Auth
 
 module SqlHelper
   def self.sql_query(repos, sql, *params)
@@ -6,7 +6,7 @@ module SqlHelper
     columns = [ ]
     types = [ ]
     repos = repos.default_repository_name if Class === repos
-    repos = self.repository(repos)
+    repos = repository(repos)
     repos.adapter.send(:with_connection) do |connection|
       begin
         command = connection.create_command(sql)

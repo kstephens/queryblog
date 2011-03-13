@@ -3,12 +3,10 @@ module Quebee
 class Query
   include DataMapper::Resource
   include Auth::Tracking
+  include Quebee::Named
 
   belongs_to :predecessor_query, :child_key => [ :predecessor_query_id ], :model => 'Query', :required => false
   
-  property :name, String
-  property :description, Text
-
   property :code, Text
 
   has 0 .. n, :query_executions, :model => 'QueryExecution', :order => [ :query_executions_index ]
@@ -35,7 +33,7 @@ class Query
 
   def execute!(options = { })
     options[:created_by] ||= 
-      AuthBuilder.created_by || 
+      Auth::Tracking.created_by || 
       self.created_by
     options[:query] = self
 
@@ -57,8 +55,8 @@ class Query
 
 
   def self.initialize!
-    self.raise_on_save_failure = true
-    Auth::Tracking.created_by = User.first(:login => 'user')
+    # self.raise_on_save_failure = true
+    Auth::Tracking.created_by = User.first(:login => 'user') or raise 'User not found'
     q = self.new :name => "List Users", :code => <<"END"
 SELECT * FROM users;
 ;;
@@ -66,7 +64,7 @@ SELECT * FROM auth_actions;
 ;;
 END
     q.save!
-    # debugger
+    debugger
     q
   end
 end

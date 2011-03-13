@@ -5,7 +5,8 @@ module Quebee
 end
 
 require 'quebee/storage'
+require 'quebee/named'
 require 'quebee/csv_result'
-require 'quebee/sql_helper'
+# require 'quebee/sql_helper'
 require 'quebee/time_parser'
 

@@ -65,6 +65,8 @@ Quebee::Application.routes.draw do
   # root :to => "welcome#index"
   root :to => "quebee/home#index"
 
+  match 'test/_' => 'test#_'
+
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.

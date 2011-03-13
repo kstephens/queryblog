@@ -1,6 +1,5 @@
 %h1
   Queries
 
-= partial 'queries/list', :queries => @queries
+= render :partial => 'quebee/queries/list', :locals => { :queries => @queries }
 
-= link_to 'New', url(:new_query)

@@ -21,11 +21,11 @@
         %td
           = link_to qe.query.name, url(:query, qe.query)
       %td.integer
-        = link_to "\##{qe.query_executions_index}", url(:query_execution, qe)
+        = link_to "\##{qe.query_executions_index}", qe
       %td.center
-        = link_to qe.created_by.login, url(:user, qe.created_by)
+        = link_to qe.created_by.login, qe.created_by
       %td
-        = link_to my_time(qe.started_on), url(:query_execution, qe)
+        = link_to my_time(qe.started_on), qe
       %td.float
         = h my_secs qe.elapsed_time
       %td.left

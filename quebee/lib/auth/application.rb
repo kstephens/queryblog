@@ -44,7 +44,7 @@ module Application
 
 
   def current_user_can_show? object, attr = nil
-    action = (url(object.class.name.downcase / 'show', object) / attr).sub(/\A\//, '')
+    action = "#{object.class.name.underscore}/show/#{object.id}/#{attr}".sub(/\A\//, '').sub(%r{//+}, '')
 
     result = 
       current_user &&
@@ -84,10 +84,10 @@ module Application
   # Converts the uri_path
   # into a auth_action.
   #
-  #   users/1/edit => users/edit/1
-  #   users/1 => users/show/1
-  #   users => users/index
-  #   users/1/delete => users/delete/1
+  #   users/1/edit => user/edit/1
+  #   users/1 => user/show/1
+  #   users => user/index
+  #   users/1/delete => user/delete/1
   #
   def uri_action
     @uri_action ||=
@@ -100,7 +100,7 @@ module Application
         "#{$1.singularize}/#{$3}/#{$2}"
       else
         x = uri_path.split('/')
-        x[0] = x[0].singularize
+        x.map!{|e| e.singularize}
         x.join('/')
       end.freeze
   end
@@ -108,7 +108,7 @@ module Application
 
   def uri_path
     @uri_path ||=
-      URI.parse(request.uri).path.sub(/\A\//, '').sub(/\/\Z/, '')
+      URI.parse(request.url).path.sub(/\A\//, '').sub(/\/\Z/, '')
   end
 
 end

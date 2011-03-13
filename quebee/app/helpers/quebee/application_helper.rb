@@ -10,7 +10,8 @@ module ApplicationHelper
   }.freeze
 
   def my_escape v
-    v.to_s.gsub(/([<>&\n])/m) {| x | ENTITY_MAP[x] || x }
+    v = v.to_s.gsub(/([<>&\n])/m) {| x | ENTITY_MAP[x] || x }
+    v.html_safe
   end
     
   def my_text_area obj, name, slot, opts = { }
@@ -23,6 +24,7 @@ module ApplicationHelper
     v = obj.send(slot).to_s
     str << my_escape(v)
     str << '</textarea>'
+    str.html_safe
   end
 
   def my_pre text, opts = { }
@@ -33,6 +35,7 @@ module ApplicationHelper
     str << '>'
     str << my_escape(text)
     str << '</pre>'
+    str.html_safe
   end
 
   def my_synopsis text, max_size = 32

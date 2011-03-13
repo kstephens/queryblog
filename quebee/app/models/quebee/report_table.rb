@@ -5,11 +5,11 @@ class ReportTable
   
   property :id, Serial
 
-  belongs_to :created_by, :child_key => [ :created_by_user_id ], :class_name => 'User'
+  belongs_to :created_by, :child_key => [ :created_by_user_id ], :model => 'User'
   property :created_on, Time
 
-  belongs_to :report, :child_key => [ :predecessor_query_id ], :class_name => 'Query'
-  belongs_to :result_table, :child_key => [ :predecessor_query_id ], :class_name => 'DatabaseTable'
+  belongs_to :report, :child_key => [ :predecessor_query_id ], :model => 'Query'
+  belongs_to :result_table, :child_key => [ :predecessor_query_id ], :model => 'DatabaseTable'
 
   has_tags_on :tags
 
@@ -26,3 +26,4 @@ class ReportTable
 
 end
 
+end

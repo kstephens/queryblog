@@ -6,11 +6,11 @@ class AuthRoleAction
   
   property :id, Serial
 
-  belongs_to :created_by, :child_key => [ :created_by ], :class_name => 'AuthUser'
+  belongs_to :created_by, :child_key => [ :created_by ], :model => 'Auth::AuthUser'
   property :created_on, Time
 
-  belongs_to :role,   :child_key => [ :role_id ],   :class_name => 'AuthRole'
-  belongs_to :action, :child_key => [ :action_id ], :class_name => 'AuthAction'
+  belongs_to :role,   :child_key => [ :role_id ],   :model => 'Auth::AuthRole'
+  belongs_to :action, :child_key => [ :action_id ], :model => 'Auth::AuthAction'
 
   property :enabled, Boolean
   property :expires_on, Time
@@ -25,7 +25,7 @@ end
 
 require 'auth/auth_role'
 class AuthRole
-  has 0 .. n, :role_actions, :child_key => [ :role_id ], :class_name => 'AuthRoleAction'
+  has 0 .. n, :role_actions, :child_key => [ :role_id ], :model => 'Auth::AuthRoleAction'
 
   # Returns the enabled actions for this role.
   def actions

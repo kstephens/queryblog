@@ -5,16 +5,17 @@ class Query
   
   property :id, Serial
 
-  belongs_to :created_by, :child_key => [ :created_by_user_id ], :class_name => 'User'
+  belongs_to :created_by, :child_key => [ :created_by_user_id ], :model => 'User'
   property :created_on, Time
 
-  belongs_to :predecessor_query, :child_key => [ :predecessor_query_id ], :class_name => 'Query'
+  belongs_to :predecessor_query, :child_key => [ :predecessor_query_id ], :model => 'Query'
   
   property :name, String
   property :description, Text
-  property :query, Text
 
-  has 0 .. n, :query_executions, :class_name => 'QueryExecution', :order => [ :query_executions_index ]
+  property :code, Text
+
+  has 0 .. n, :query_executions, :model => 'QueryExecution', :order => [ :query_executions_index ]
   property :query_executions_count, Integer
 
   has_tags_on :tags
@@ -61,8 +62,8 @@ class Query
 
 
   def self.initialize!
-    AuthBuilder.created_by = User.first(:login => 'user')
-    q = self.new :name => "List Users", :query => <<"END"
+    Auth::AuthBuilder.created_by = User.first(:login => 'user')
+    q = self.new :name => "List Users", :code => <<"END"
 SELECT * FROM users;
 ;;
 SELECT * FROM auth_actions;

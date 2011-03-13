@@ -6,10 +6,10 @@ class AuthUserRole
   property :id, Serial
 
   property :created_on, Time
-  belongs_to :created_by, :child_key => [ :created_by ], :class_name => 'User'
+  belongs_to :created_by, :child_key => [ :created_by ], :model => 'Auth::AuthUser'
 
-  belongs_to :user, :child_key => [ :user_id ], :class_name => 'User'
-  belongs_to :role, :child_key => [ :role_id ], :class_name => 'AuthRole'
+  belongs_to :user, :child_key => [ :user_id ], :model => 'Auth::AuthUser'
+  belongs_to :role, :child_key => [ :role_id ], :model => 'Auth::AuthRole'
 
   property :enabled, Boolean
   property :expires_on, Time
@@ -21,8 +21,8 @@ end
 
 require 'auth/auth_user'
 class AuthUser
-  has 0 .. n, :user_actions, :child_key => [ :user_id ], :class_name => 'AuthUserAction'
-  has 0 .. n, :user_roles,   :child_key => [ :role_id ], :class_name => 'AuthUserRole'
+  has 0 .. n, :user_actions, :child_key => [ :user_id ], :model => 'Auth::AuthUserAction'
+  has 0 .. n, :user_roles,   :child_key => [ :role_id ], :model => 'Auth::AuthUserRole'
 
   def roles
     user_roles.select{|x| x.enabled}.map{|x| x.role}.select{|x| x.enabled}

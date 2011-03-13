@@ -101,7 +101,7 @@ class AuthBuilder
       name
     when String
       x = AuthRole.first_or_create({ :name => name }, { :name => name })
-      x.save! if x.new_record?
+      x.save! if x.new?
       x
     else
       raise ArgumentError
@@ -116,7 +116,7 @@ class AuthBuilder
       name
     when String
       x = AuthAction.first_or_create({ :name => name }, { :name => name })
-      x.save! if x.new_record?
+      x.save! if x.new?
       x
     else
       raise ArgumentError
@@ -130,7 +130,7 @@ class AuthBuilder
     fargs = { :user_id => user.id, :role_id => role.id }
     args = { :user => user, :role => role }
     x = AuthUserRole.first_or_create(fargs, args)
-    x.save! if x.new_record?
+    x.save! if x.new?
     role
   end
 
@@ -142,13 +142,13 @@ class AuthBuilder
       fargs = { :user_id => x.id, :action_id => action.id, :allow => allow }
       args = { :user => x, :action => action, :allow => allow }
       x = AuthUserAction.first_or_create(fargs, args)
-      x.save! if x.new_record?
+      x.save! if x.new?
       x
     when AuthRole
       fargs = { :role_id => x.id, :action_id => action.id, :allow => allow }
       args = { :role => x, :action => action, :allow => allow }
       x = AuthRoleAction.first_or_create(fargs, args)
-      x.save! if x.new_record?
+      x.save! if x.new?
       x
     else
       raise ArgumentError

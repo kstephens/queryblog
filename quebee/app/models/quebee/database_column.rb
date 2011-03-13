@@ -5,7 +5,7 @@ class DatabaseColumn
   
   property :id, Serial
 
-  belongs_to :database_table, :class_name => 'DatabaseTable'
+  belongs_to :database_table, :model => 'DatabaseTable'
 
   property :name, String
   property :description, Text

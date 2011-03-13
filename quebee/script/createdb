@@ -1,0 +1,7 @@
+#!/bin/sh
+# TOTALLY ANNOYING hack because
+# dm-rails-1.0.4/lib/dm-rails/storage.rb does not handle the :template option.
+set -x
+exec /opt/local/lib/postgresql90/bin/createdb -T template0 "$@"
+
+

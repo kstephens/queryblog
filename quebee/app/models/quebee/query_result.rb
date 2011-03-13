@@ -20,7 +20,7 @@ class QueryResult
   property :number_of_rows, Integer
   property :number_of_bytes, Integer
 
-  belongs_to :query_execution, :class_name => 'QueryExecution'
+  belongs_to :query_execution, :model => 'QueryExecution'
   property :query_results_index, Integer
 
   property :query_is_sensitive, Boolean

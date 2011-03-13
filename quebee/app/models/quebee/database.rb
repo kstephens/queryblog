@@ -8,7 +8,7 @@ class Database
   property :name, String
   property :description, Text
 
-  belongs_to :database_type, :class_name => 'DatabaseType'
+  belongs_to :database_type, :model => 'DatabaseType'
 end
 
 end

@@ -8,7 +8,7 @@ class DatabaseTable
   property :name, String
   property :description, Text
 
-  has 1 .. n, :database_columns, :class_name => 'DatabaseColumn'
+  has 1 .. n, :database_columns, :model => 'DatabaseColumn'
 end
 
 end

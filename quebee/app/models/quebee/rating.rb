@@ -8,11 +8,11 @@ class Rating
 
   property :rating, Float
 
-  # belongs_to :target, :class_name => 'RatingTarget'
+  # belongs_to :target, :model => 'RatingTarget'
 
-  belongs_to :user, :class_name => 'User'
+  belongs_to :user, :model => 'User'
 
-  belongs_to :rating_type, :class_name => 'RatingType'
+  belongs_to :rating_type, :model => 'RatingType'
 end
 
 end

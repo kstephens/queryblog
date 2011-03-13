@@ -5,10 +5,10 @@ class QueryExecution
   
   property :id, Serial
 
-  belongs_to :created_by, :child_key => [ :created_by_user_id ], :class_name => 'User'
+  belongs_to :created_by, :child_key => [ :created_by_user_id ], :model => 'User'
   property :created_on, Time
 
-  belongs_to :aborted_by, :child_key => [ :aborted_by_user_id ], :class_name => 'User'
+  belongs_to :aborted_by, :child_key => [ :aborted_by_user_id ], :model => 'User'
   property :aborted_on, Time
 
   property :started_on, Time
@@ -18,10 +18,10 @@ class QueryExecution
   property :error, Text
   property :backtrace, Text
 
-  belongs_to :query, :class_name => 'Query'
+  belongs_to :query, :model => 'Query'
   property :query_executions_index, Integer
 
-  has 0 .. n, :query_results, :class_name => 'QueryResult', :order => [ :query_results_index ]
+  has 0 .. n, :query_results, :model => 'QueryResult', :order => [ :query_results_index ]
   property :query_results_count, Integer
 
   property :query_is_sensitive, Boolean

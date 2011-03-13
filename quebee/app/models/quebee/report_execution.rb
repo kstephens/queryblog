@@ -5,7 +5,7 @@ class ReportExecution < QueryExecution
   
   property :id, Serial
 
-  belongs_to :report, :class_name => 'Report'
+  belongs_to :report, :model => 'Report'
   property :report_executions_index, Integer
 
   before :save do

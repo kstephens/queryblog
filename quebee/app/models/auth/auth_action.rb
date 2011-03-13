@@ -6,7 +6,7 @@ class AuthAction
   
   property :id, Serial
 
-  belongs_to :created_by, :child_key => [ :created_by ], :class_name => 'AuthUser'
+  belongs_to :created_by, :child_key => [ :created_by ], :model => 'Auth::AuthUser'
   property :created_on, Time
 
   property :name, String

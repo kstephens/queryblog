@@ -1,6 +1,6 @@
 module Auth
 
-AuthUser = ::User
+AuthUser = ::Quebee::User
 
 class AuthUser
 
@@ -12,7 +12,7 @@ class AuthUser
                                  :enable_login => (name == 'root'),
                                }
                                )
-      x.save! if x.new_record?
+      x.save! if x.new?
       x
     end
 

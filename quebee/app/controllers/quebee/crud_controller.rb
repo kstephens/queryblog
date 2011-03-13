@@ -39,7 +39,13 @@ module Quebee
     end
 
     def new_model!
-      self.model_instance = model_class.new(params[model_name])
+      if params[:id]
+        find_model!
+        copy_model! if respond_to?(:copy_model!)
+      else
+        attrs = params[model_name] || EMPTY_Hash
+        self.model_instance = model_class.new(attrs)
+      end
       self
     end
 
@@ -61,7 +67,7 @@ module Quebee
     def create_model!
       new_model!
       return if :redirect == block_given? && yield(:before)
-      if self.model_instance.save!
+      if model_instance.valid? && model_instance.save!
         return if :redirect == block_given? && yield(:after) 
         redirect_to :action => :show, :id => self.model_instance
       else

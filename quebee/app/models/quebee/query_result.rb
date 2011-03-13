@@ -103,9 +103,11 @@ class QueryResult
         t.add_row r
       end
     end
+    
+    close
 
     self.number_of_rows = rows.size + 2
-    self.number_of_bytes = nil
+    self.number_of_bytes = File.size(filename)
 
     self
 

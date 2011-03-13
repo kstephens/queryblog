@@ -40,6 +40,7 @@
         = h "(#{@query_result.number_of_bytes rescue nil} bytes)"
         = h "(#{@query_result.number_of_rows rescue nil} lines)"
         = h "(#{@query_result.size rescue nil} rows)"
+        = h "(#{@query_result.columns.size rescue nil} columns)"
     %tr
       %th
         Rows

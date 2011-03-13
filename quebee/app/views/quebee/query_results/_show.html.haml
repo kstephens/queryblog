@@ -28,7 +28,7 @@
         File
       %td
         - if File.exist?(@query_result.filename)
-          = "<a href=\"#{h @query_result.uri}\" type=\"#{h @query_result.file_mime_type}\">#{h File.basename(@query_result.uri)}</a>"
+          = "<a href=\"#{h @query_result.uri}\" type=\"#{h @query_result.file_mime_type}\">#{h File.basename(@query_result.uri)}</a>".html_safe
         - else
           %strong
             = h "N/A"
@@ -42,19 +42,27 @@
         %table{:id => "query_result_#{@query_result.id}", :class => "query_result sortable"}
           %thead.query_result
             %tr
+              %th.query_result_row
+                = h 'ROW:'
               - for column in @query_result.columns
                 %th.query_result_column
                   = h column.name
             %tr
+              %th.query_result_type
+                = h ''
               - for column in @query_result.columns
                 %th.query_result_type
                   = h column.type.name
             %tr
+              %th.query_result_type
+                = h ''
               - for column in @query_result.columns
                 %th.query_result_sep
           %tbody.query_result
             - for i in 0 ... @query_result.size
               %tr.query_result_data
+                %td{:class => "query_result_row Integer"}
+                  = "#{i + 1}"
                 - r = @query_result[i]; for column in @query_result.columns
                   %td{:class => "query_result_data #{column.type.name}"}
                     = h r[column.name]

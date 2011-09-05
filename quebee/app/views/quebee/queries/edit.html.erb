@@ -1,0 +1,66 @@
+<h1>
+  Edit Query
+  <%= h @query.name.inspect %>
+</h1>
+
+<%= link_to 'Show', @query %>
+|
+<%= link_to 'Back', '../..' %>
+
+<%= error_messages_for :query %>
+
+<%= form_for(@query, :action => "#{@query.id}/update") do %>
+  <table>
+    <tr>
+      <th>
+        Name
+      <td>
+        <%= text_field :query, :name %>
+      </td>
+    </th>
+    <tr>
+      <th>
+        Description
+      </th>
+      <td>><</td>
+        <%= my_text_area @query, :query, :description %>
+    </tr>
+    <tr>
+      <th>
+        Query
+      </th>
+      <td>><</td>
+        <%= my_text_area @query, :query, :code, :cols => 80, :rows => [ @query.query_lines.size, 32 ].min %>
+    </tr>
+    <tr>
+      <th>
+        Sensitive?
+      </th>
+      <td>
+        Query?
+        <%= check_box :query, :query_is_sensitive %>
+        Result?
+        <%= check_box :query, :result_is_sensitive %>
+      </td>
+    </tr>
+  </tr>
+  
+  <p>
+    <%= submit_tag "Update" %>
+    <%= submit_tag "Update and Execute" %>
+  </p>
+</table>
+
+<hr>
+</hr>
+
+- if @query_execution = @query.query_executions.last 
+  <h2>
+    Most recent execution of 
+    <%= @query.query_executions_count %>
+    executions.
+  <%= render :partial => 'quebee/query_executions/show' %>
+  <hr>
+  </hr>
+  
+</h2>

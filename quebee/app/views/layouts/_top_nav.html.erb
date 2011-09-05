@@ -1,0 +1,28 @@
+<h1 class='header'>
+  <a href='/'>
+    <%= @page_title %>
+  </a>
+</h1>
+<hr class='top_menu'>
+</hr>
+<div class='top_menu'>
+  <%= link_to 'Home', '/' %>
+  |
+  <%= link_to 'Queries', '/quebee/queries' %>
+  |
+  <%= link_to 'Executions', '/quebee/query_executions' %>
+  |
+  <%= link_to 'Users', '/quebee/users' %>
+  |
+  <% if controller.authenticated_user %>
+    Hello, 
+    <%= link_to controller.authenticated_user.login, "/quebee/users/#{session.user.id}" %>
+    <%= link_to '(logout)', '/auth/session/logout' %>
+  <% else %>
+    <%= link_to 'Login', '/auth/session/login' %>
+  <% end %>
+</div>
+<hr class='top_menu'>
+</hr>
+
+

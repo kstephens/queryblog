@@ -1,0 +1,15 @@
+<h1>QueryExecutions controller, new action</h1>
+
+<p>
+  Edit this file in 
+  <tt>app/views/query_executions/new.html.erb</tt>
+</p>
+
+<%= error_messages_for :query_execution %>
+
+<%= form_for(@query_execution, :action => url(:query_executions) ) do %>
+  <p>
+    <%= submit "Create" %>
+</p>
+
+<%= link_to 'Back', url(:query_executions) %>

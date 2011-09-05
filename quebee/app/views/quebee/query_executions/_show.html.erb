@@ -1,0 +1,67 @@
+<table>
+  <% if @show_query && false %>
+    <tr>
+      <th>
+        Query
+      <td>
+        <%= link_to @query_execution.query.name.inspect, @query_execution.query %>
+      </td>
+    </th>
+  </tr>
+  <% end %>
+  <tr>
+    <th>
+      User
+    </th>
+    <td>
+      <%= link_to @query_execution.created_by.login, @query_execution.created_by %>
+      at
+      <%= h @query_execution.created_on %>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      Time
+    </th>
+    <td>
+      <%= h my_time(@query_execution.started_on) %>
+      for
+      <%= h my_secs(@query_execution.elapsed_time) %>
+    </td>
+  </tr>
+  <% if @query_execution.error || @query_execution.backtrace %>
+    <tr>
+      <th>
+        Error
+      <td>
+        <% if e = @query_execution.error %>
+          ~ my_pre e, :style => :error
+        <% else %>
+          <%= h '<none>' %>
+        <% end %>
+      </td>
+    </th>
+    <tr>
+      <th>
+        Backtrace
+      </th>
+      <td>
+        <% if e = @query_execution.backtrace %>
+          ~ my_pre e, :style => :backtrace
+        <% else %>
+          <%= h '<none>' %>
+        <% end %>
+      </td>
+    </tr>
+  </tr>
+  <% end %>
+</table>
+
+<h2>
+  Results
+</h2>
+
+<% for @query_result in @query_execution.query_results %>
+  <%= render :partial => 'quebee/query_results/show' %>
+<% end %>
+

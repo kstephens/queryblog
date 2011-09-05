@@ -1,0 +1,23 @@
+<h2>
+  Top Queries
+</h2>
+<%= render :partial => 'quebee/queries/list', :locals => { :queries => @top_queries } %>
+
+<hr>
+</hr>
+
+<h2>
+  New Queries
+</h2>
+<%= render :partial => 'quebee/queries/list', :locals => { :queries => @new_queries } %>
+
+<hr>
+</hr>
+
+<h2>
+  Recent Queries
+</h2>
+<%= render :partial => 'quebee/query_executions/list', :locals => { :query_executions => @recent_queries, :show_query => true } %>
+
+<hr>
+</hr>

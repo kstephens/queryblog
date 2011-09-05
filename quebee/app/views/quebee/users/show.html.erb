@@ -1,0 +1,19 @@
+<h1>
+  User
+  <%= @user.login.inspect %>
+</h1>
+
+<table>
+  <tr>
+    <td>
+      Login
+    </td>
+    <td>
+      <%= @user.login %>
+    </td>
+  </tr>
+</table>
+
+<%= link_to 'Edit',  url(:edit_user,  @user) %>
+|
+<%= link_to 'Back', url(:users) %>

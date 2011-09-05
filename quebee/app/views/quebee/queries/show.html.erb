@@ -1,0 +1,62 @@
+<h1>
+  Query
+  <%= h @query.name.inspect %>
+</h1>
+
+<%= link_to 'Edit', "#{@query.id}/edit" %>
+|
+<%= link_to 'Back', '..' %>
+
+<table>
+  <tr>
+    <th>
+      Name
+    </th>
+    <td>
+      <%= h @query.name %>
+      ~ my_pre @query.description
+    </td>
+  </tr>
+  <tr>
+    <th>
+      Created By  
+    </th>
+    <td>
+      <%= link_to @query.created_by.login, @query.created_by %>
+      <%= h @query.created_on %>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      Query
+    </th>
+    <td>
+      ~ my_pre @query.code, :class => :sql_statement
+    </td>
+  </tr>
+</table>
+
+  <tr>
+    <th>
+      Sensitive
+    <td class='left'>
+      <%= @query.query_is_sensitive  ? x = "Query " : '' %>
+      <%= @query.result_is_sensitive ? x = "Result " : '' %>
+      <%= x ? '' : '<i>Not Sensitive</i>'.html_safe %>
+    </td>
+  </th>
+</tr>
+
+  <tr>
+    <th>
+    <td>
+      <%= link_to 'Execute', "#{@query.id}/execute" %>
+    </td>
+  </th>
+</tr>
+
+<h2>
+  Executions
+</h2>
+<%= render :partial => 'quebee/query_executions/list', :locals => { :query_executions => @query.query_executions, :show_query => false } %>
+

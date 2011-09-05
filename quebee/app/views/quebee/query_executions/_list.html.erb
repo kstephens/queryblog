@@ -1,0 +1,64 @@
+<table>
+  <tr>
+    <% if show_query && false %>
+      <th>
+        Query
+    </th>
+    <th>
+      <%= '#' %>
+    </th>
+    <th>
+      User
+    </th>
+    <th>
+      Started
+    </th>
+    <th>
+      Elapsed Time
+    </th>
+    <th>
+      Sensitive
+    </th>
+    <th>
+      Error
+    </th>
+    <% end %>
+  </tr>
+  <% for qe in query_executions %>
+    <tr>
+     <% if show_query && false %>
+      <td>
+          <%= link_to qe.query, qe.query %>
+      </td>
+      <td class='integer'>
+        <%= link_to "\##{qe.query_executions_index}", qe %>
+      </td>
+      <td class='center'>
+        <%= link_to qe.created_by.login, qe.created_by %>
+      </td>
+      <td>
+        <%= link_to my_time(qe.started_on), qe %>
+      </td>
+      <td class='float'>
+        <%= h my_secs qe.elapsed_time %>
+      </td>
+      <td class='left'>
+        <%= qe.query_is_sensitive  ? x = "Query" : '' %>
+        <%= qe.result_is_sensitive ? x = "Result" : '' %>
+        <%= x ? '' : '<i>Not Sensitive</i>'.html_safe %>
+      </td>
+      <td>
+        <% if e = qe.error %>
+          <span class='error'>
+            <%= h my_synopsis(e) %>
+        </span>
+        <% else %>
+          <%= h '<none>' %>
+        <% end %>
+      </td>
+    </td>
+  <% end %>
+  </tr>
+  <% end %>
+</table>
+

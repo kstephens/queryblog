@@ -1,0 +1,19 @@
+<h1>
+  QueryResults controller, edit action
+</h1>
+<p>
+  Edit this file in
+  <tt>
+    app/views/query_results/edit.html.erb
+  </tt>
+</p>
+<%= error_messages_for :query_result %>
+
+<%= form_for(@query_result, :action => url(:query_result, @query_result)) do %>
+  <p>
+    <%= submit "Update" %>
+</p>
+
+<%= link_to 'Show', url(:query_result, @query_result) %>
+|
+<%= link_to 'Back', url(:query_results) %>

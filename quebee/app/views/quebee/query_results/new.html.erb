@@ -1,0 +1,15 @@
+<h1>QueryResults controller, new action</h1>
+
+<p>
+  Edit this file in 
+  <tt>app/views/query_results/new.html.erb</tt>
+</p>
+
+<%= error_messages_for :query_result %>
+
+<%= form_for(@query_result, :action => url(:query_results) ) do %>
+  <p>
+    <%= submit "Create" %>
+</p>
+
+<%= link_to 'Back', url(:query_results) %>

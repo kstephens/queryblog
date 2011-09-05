@@ -1,0 +1,128 @@
+<table>
+  <tr>
+    <th>
+      Statement
+    </th>
+    <td>
+      <%= my_pre my_synopsis(@query_result.statement), :class => :sql_statement %>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      Time
+    </th>
+    <td>
+      <%= h @query_result.started_on %>
+      for
+      <%= h my_secs(@query_result.elapsed_time) %>
+    </td>
+  </tr>
+  <tr>
+    <th>
+      EXPLAIN
+    </th>
+    <td>
+      <%= my_pre @query_result.explanation %>
+    </td>
+  </tr>
+  <% if @query_result.error %>
+    <tr>
+      <th>
+        Error
+      <td>
+        <%= my_pre @query_result.error, :class => :error %>
+      </td>
+    </th>
+    <tr>
+      <th>
+        Backtrace
+      </th>
+      <td>
+        <%= my_pre @query_result.backtrace, :class => :backtrace %>
+      </td>
+    </tr>
+  </tr>
+  <% else %>
+    <tr>
+      <th>
+        File
+      <td>
+        <% if File.exist?(@query_result.filename) %>
+          <%= "<a href=\"#{h @query_result.uri}\" type=\"#{h @query_result.file_mime_type}\">#{h File.basename(@query_result.uri)}</a>".html_safe %>
+        <% else %>
+          <strong>
+            <%= h "N/A" %>
+          </strong>
+        <% end %>
+        <%= h "(#{@query_result.number_of_bytes rescue nil} bytes)" %>
+        <%= h "(#{@query_result.number_of_rows rescue nil} lines)" %>
+        <%= h "(#{@query_result.size rescue nil} rows)" %>
+        <%= h "(#{@query_result.columns.size rescue nil} columns)" %>
+      </td>
+    </th>
+    <tr>
+      <th>
+        Rows
+      </th>
+      <td>
+        <table class='query_result sortable' id='query_result_<%= @query_result.id %>'>
+          <thead class='query_result'>
+            <tr>
+              <th class='query_result_row'>
+                <%= h 'ROW:' %>
+              </th>
+              <% for column in @query_result.columns %>
+                <th class='query_result_column'>
+                  <%= h column.name %>
+              </th>
+              <% end %>
+            </tr>
+            <tr>
+              <th class='query_result_type'>
+                <%= h '' %>
+              </th>
+              <% for column in @query_result.columns %>
+                <th class='query_result_type'>
+                  <%= h column.type.name %>
+              </th>
+              <% end %>
+            </tr>
+            <tr>
+              <th class='query_result_type'>
+                <%= h '' %>
+              </th>
+              <% for column in @query_result.columns %>
+                <th class='query_result_sep'>
+              </th>
+              <% end %>
+            </tr>
+          </thead>
+          <tbody class='query_result'>
+            <% for i in 0 ... @query_result.size %>
+              <tr class='query_result_data'>
+                <td class='query_result_row Integer'>
+                  <%= "#{i + 1}" %>
+                </td>
+                <% r = @query_result[i]; for column in @query_result.columns %>
+                  <td class='query_result_data <%= column.type.name %>'>
+                    <%= h r[column.name] %>
+                  </td>
+                <% end %>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+        <hr>
+          <center>
+            <i>
+              END OF RESULT
+        <hr>
+      </hr>
+    </i>
+  </center>
+</hr>

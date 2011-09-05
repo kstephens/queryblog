@@ -14,7 +14,7 @@ class QueryExecution
   property :error, Text
   property :backtrace, Text
 
-  belongs_to :query, :model => 'Query'
+  belongs_to :query, :model => '::Quebee::Query'
   property :query_executions_index, Integer, :required => true
 
   has 0 .. n, :query_results, :model => 'QueryResult', :order => [ :query_results_index ]

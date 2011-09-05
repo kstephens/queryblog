@@ -1,0 +1,34 @@
+<h2>
+  Users
+</h2>
+<table>
+  <tr>
+    <th>User</th>
+    <th>Created</th>
+    <th>Enabled</th>
+    <th>
+      <% if current_user_can? 'user/new' %>
+        <%= link_to 'New', url(:new_user) %>
+      <% end %>
+    </th>
+  </tr>
+  <% for user in @users %>
+    <tr>
+      <td>
+        <% if current_user_can_show? user %>
+          <%= link_to user.login, url(:user, user) %>
+        <% else %>
+          <%= h user.login %>
+	<% end %>
+      </td>
+      <td><%= user.created_on %></td>
+      <td><%= user.enable_login.inspect %></td>
+      <td>
+        <% if current_user_can_edit? user %>
+          <%= link_to 'Edit', url(:edit_user, user) %>
+	<% end %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+

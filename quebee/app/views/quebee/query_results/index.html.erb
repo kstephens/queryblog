@@ -1,0 +1,25 @@
+<h1>
+  QueryResults controller, index action
+</h1>
+<p>
+  Edit this file in
+  <tt>
+    app/views/query_results/index.html.erb
+  </tt>
+</p>
+<table>
+  <tr>
+  </tr>
+  <% for query_result in @query_results %>
+    <tr>
+      <td>
+        <%= link_to 'Show', url(:query_result, query_result) %>
+      </td>
+      <td>
+        <%= link_to 'Edit', url(:edit_query_result,  query_result) %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+
+<%= link_to 'New', url(:new_query_result) %>

@@ -122,6 +122,8 @@ GEM
       ruby-debug-base (~> 0.10.4.0)
     ruby-debug-base (0.10.4)
       linecache (>= 0.3)
+    rufus-scheduler (2.0.8)
+      tzinfo (>= 0.3.23)
     simplest_auth (0.2.10)
       bcrypt-ruby (~> 2.1.1)
     stringex (1.1.0)
@@ -160,6 +162,7 @@ DEPENDENCIES
   railties (~> 3.0.1)
   rspec-rails (~> 2.0.1)
   ruby-debug
+  rufus-scheduler
   simplest_auth
   uuid
   wirble

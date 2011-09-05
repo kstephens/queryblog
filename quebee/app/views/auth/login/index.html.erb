@@ -1,0 +1,25 @@
+<h2>Login</h2>
+
+<%= error_messages_for :login %>
+
+<%= form_for(@login, :action => url(:login) ) do %>
+  <table>
+    <tr>
+      <th>
+        Login
+      <td>
+        <%= text_field :login %>
+      </td>
+    </th>
+    <tr>
+      <th>
+        Password
+      </th>
+      <td>
+        <%= password_field :password, :label => :Password %>
+      </td>
+    </tr>
+  </tr>
+  <%= submit "Login" %>
+</table>
+

@@ -64,13 +64,6 @@ if RAILS_ENV != 'production'
     end
   end
 
-
-  def raise_mongrel_timeout
-    $stderr.puts "#{$$}: sending Mongrel::TimeoutError"
-    raise Mongrel::TimeoutError, "#{self.class}"
-  end
-
-
   # Use this to terminate webrick under rcov/ruby-prof.
   def graceful_exit
     logger.info "graceful_exit"

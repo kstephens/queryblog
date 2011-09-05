@@ -43,7 +43,7 @@ class QueryResult
     if File.exist?(file = UUID_FILE)
       File.read(file).chomp!
     else
-      unless @uuid
+      unless @@uuid
         require 'uuid'
         @@uuid = UUID.new
       end

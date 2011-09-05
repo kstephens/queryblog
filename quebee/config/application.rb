@@ -49,7 +49,7 @@ module Quebee
     config.filter_parameters += [:password]
 
     config.generators do |g|
-      g.template_engine :haml
+      # g.template_engine :haml
       
       # you can also specify a different test framework or ORM here
       g.test_framework  :rspec

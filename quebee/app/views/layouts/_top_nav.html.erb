@@ -14,7 +14,7 @@
   |
   <%= link_to 'Users', '/quebee/users' %>
   |
-  <% if controller.authenticated_user %>
+  <% if controller.respond_to?(:authenticated_user) && controller.authenticated_user %>
     Hello, 
     <%= link_to controller.authenticated_user.login, "/quebee/users/#{session.user.id}" %>
     <%= link_to '(logout)', '/auth/session/logout' %>

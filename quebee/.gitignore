@@ -1,4 +1,5 @@
 Gemfile.lock
+.rbx
 .bundle
 db/*.sqlite3
 log/*.log

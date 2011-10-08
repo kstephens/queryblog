@@ -1,7 +1,8 @@
 source 'http://rubygems.org'
 
-RAILS_VERSION = '~> 3.0.1'
+RAILS_VERSION = '~> 3.0.5'
 DM_VERSION    = '~> 1.0.2'
+DO_VERSION    = '~> 0.10.3'
 
 gem 'activesupport',      RAILS_VERSION, :require => 'active_support'
 gem 'actionpack',         RAILS_VERSION, :require => 'action_pack'
@@ -9,7 +10,17 @@ gem 'actionmailer',       RAILS_VERSION, :require => 'action_mailer'
 gem 'railties',           RAILS_VERSION, :require => 'rails'
 
 gem 'dm-rails',          '~> 1.0.4'
-gem 'dm-sqlite-adapter', DM_VERSION
+# gem 'dm-sqlite-adapter', DM_VERSION
+
+case RUBY_PLATFORM
+when /java/
+gem 'do_jdbc'              ,DO_VERSION
+gem 'jdbc-postgres'        ,'~> 9.0.801' # jruby: Invalid memory access
+# gem 'sqlite3'              #,      
+# gem 'jdbc-sqlite3'   # jruby: Invalid memory access of location 0x2d4 rip=0x10d612011
+else
+# gem 'sqlite3'
+end
 
 # You can use any of the other available database adapters.
 # This is only a small excerpt of the list of all available adapters

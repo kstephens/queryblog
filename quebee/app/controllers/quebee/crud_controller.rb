@@ -33,7 +33,7 @@ module Quebee
 
     def find_model!
       x = model_class.find(params[:id])
-      raise NotFound unless x
+      raise Error::NotFound unless x
       self.model_instance = x
       self
     end
@@ -50,7 +50,7 @@ module Quebee
     end
 
     def update_model!
-      if self.model_instance.update_attributes(params[model_name])
+      if self.model_instance.update(params[model_name])
         return if :redirect == block_given? && yield(:before)
         if self.model_instance.save!
           return if :redirect == block_given? && yield(:after) 

@@ -1,6 +1,17 @@
 module Quebee
 
 module ApplicationHelper
+  def error_messages_for var
+    errors = flash[:errors]
+    errors &&= errors[var]
+    if errors && ! errors.empty?
+      errors = errors.map do | k, v |
+        "#{k.humanize} - #{v}"
+      end * "<br />\n"
+    end
+    errors.to_s.html_safe
+  end
+
   # HACKETY, HACK, HACK
   ENTITY_MAP = {
     '<' => '&lt;',

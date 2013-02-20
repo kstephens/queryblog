@@ -1,6 +1,5 @@
-require 'rubygems'
 require 'fileutils'
-
+require 'csv'
 
 module Quebee
 

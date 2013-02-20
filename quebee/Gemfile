@@ -7,6 +7,8 @@ gem 'activesupport',      RAILS_VERSION, :require => 'active_support'
 gem 'actionpack',         RAILS_VERSION, :require => 'action_pack'
 gem 'actionmailer',       RAILS_VERSION, :require => 'action_mailer'
 gem 'railties',           RAILS_VERSION, :require => 'rails'
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
 
 gem 'dm-rails',          "~> #{DM_VERSION}"
 gem 'dm-sqlite-adapter', DM_VERSION
@@ -39,10 +41,9 @@ gem 'dm-ar-finders',        DM_VERSION
 
 gem 'simplest_auth'
 gem 'wirble'
-gem 'json'
+gem 'multi_json'
 gem 'haml'
 gem 'uuid'
-gem 'fastercsv'
 gem 'rufus-scheduler'
 gem 'pry'
 

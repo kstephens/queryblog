@@ -266,6 +266,14 @@ module Quebee
         value.min = min
         value.sec = sec
         type = :time_relative
+      when /\A(\d\d?)([\/-])(\d\d\d\d)\b/i
+        mon = $1 && $1.to_i
+        sep = $2
+        year = $3 && $3.to_i
+        value = TimeRelative.new
+        value.year = year
+        value.mon = mon
+        type = :date_relative
       when /\A((0?[1-9]|1[0-2])\s*(am?|pm?))\b/i
         hour = $2.to_i
         meridian = ($3 || '').downcase

@@ -18,7 +18,7 @@ module Quebee
     end
 
     def authorization_check!
-      raise Auth::Error unless current_user_can?
+      raise Error::NotAuthorized, "#{uri_action}" unless current_user_can?
       self
     end
 

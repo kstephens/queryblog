@@ -1,6 +1,4 @@
-gem 'json_pure'
-require 'json'
-
+require 'multi_json'
 
 module NickleSlots
 class Builder
@@ -193,7 +191,7 @@ class Builder
       slot_element(name, opts, &blk) +
       "<script type=\"text/javascript\">\n" +
       "<!-- \n" +
-        "NickleSlots.editable(#{JSON.generate(opts)});\n" + 
+        "NickleSlots.editable(#{MultiJson.generate(opts)});\n" + 
       " --> \n" +
       '</script>'
     end +

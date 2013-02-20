@@ -8,7 +8,7 @@
       %th
         = '# Runs'
       %th
-        = link_to 'New', :action => :new
+        = link_to 'New', :action => :new rescue nil
     - for query in queries
       %tr
         %td

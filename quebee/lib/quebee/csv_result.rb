@@ -1,6 +1,4 @@
 require 'rubygems'
-gem 'fastercsv'
-require 'fastercsv'
 require 'fileutils'
 
 
@@ -146,7 +144,7 @@ class CsvResult
         lines = fh.readline + fh.readline
       end
       
-      lines = FasterCSV.parse(lines)
+      lines = CSV.parse(lines)
       column_names = lines[0]
       column_types = lines[1]
       
@@ -202,7 +200,7 @@ class CsvResult
     pos = row_index[i + 2]
     File.open(filename, 'r') do | fh |
       fh.seek(pos)
-      row = FasterCSV.parse_line(fh)
+      row = CSV.parse_line(fh)
       hash = _row_to_hash row
     end
     close
@@ -226,7 +224,7 @@ class CsvResult
   def rows
     @rows ||= 
       begin
-        rows = FasterCSV.read(filename)
+        rows = CSV.read(filename)
         $stderr.puts "rows = #{rows.inspect}"
         rows.shift
         rows.shift
@@ -490,7 +488,7 @@ module UniqueFile
   def self.file_hash file
     d = Digest::MD5.new
     File.open(file) do | fh |
-      d << fh.read(8192)
+      d << (fh.read(8192) || "")
     end
     d.hexdigest
   end

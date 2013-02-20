@@ -30,9 +30,9 @@ module NickleSlots
 end # module
 
 
-module Merb::TagHelper
-  include NickleSlots::Helper
-end
+#module Merb::TagHelper
+#  include NickleSlots::Helper
+#end
 
 
 

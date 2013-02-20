@@ -450,6 +450,8 @@ module Quebee
           new(@amount + x, @unit)
         when TimeInterval
           new(@amount.to_sec + x.to_sec, :second)
+        else
+          raise TypeError, x.class.to_s
         end
       end
 
@@ -459,6 +461,8 @@ module Quebee
           new(@amount - x, @unit)
         when TimeInterval
           new(@amount.to_sec - x.to_sec, :second)
+        else
+          raise TypeError, x.class.to_s
         end
       end
 
@@ -477,6 +481,8 @@ module Quebee
           new(@amount / x, @unit)
         when TimeInterval
           @amount.to_sec / x.to_sec
+        else
+          raise TypeError, x.class.to_s
         end
       end
 

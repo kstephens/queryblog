@@ -1,12 +1,5 @@
 require 'time'
 require 'rational'
-require 'rubygems'
-gem 'treetop'
-
-if $DEBUG
-  gem 'ruby-debug'
-  require 'ruby-debug'
-end
 
 module Quebee
   class TimeParser

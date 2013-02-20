@@ -40,5 +40,5 @@ production:
   #   repo1:
   #     database: sample_production.db
  
-rake:
-  <<: *defaults
+#rake:
+#  <<: *defaults

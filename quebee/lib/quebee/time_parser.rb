@@ -24,7 +24,7 @@ module Quebee
     end
 
     def parse str
-      @input = str
+      @input = str.dup
       @result = p_start
       @result = @result.value if @result.respond_to?(:value)
       @result

@@ -43,6 +43,7 @@ gem 'json'
 gem 'haml'
 gem 'uuid'
 gem 'fastercsv'
+gem 'rufus-scheduler'
 
 group(:development, :test) do
 

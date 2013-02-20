@@ -10,8 +10,8 @@ class AuthBuilder
     @user = opts[:user]
     @role = opts[:role]
     if block_given?
+      save = DataMapper::Model.raise_on_save_failure
       begin
-        save = DataMapper::Model.raise_on_save_failure
         DataMapper::Model.raise_on_save_failure = true
         instance_eval &blk
       rescue DataMapper::SaveFailureError => err
